@@ -9,8 +9,8 @@ function Header({}: Props) {
       <Link href="/" className="bg-blue-200 rounded px-4 py-2">
         Home
       </Link>
-      <Link href="/todos" className="bg-cyan-200 rounded px-4 py-2">
-        Todos
+      <Link href="/login" className="bg-cyan-200 rounded px-4 py-2">
+        Login Page
       </Link>
     </nav>
   );

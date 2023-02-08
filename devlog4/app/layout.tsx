@@ -1,5 +1,5 @@
 import "../styles/globals.css";
-import Headers from "./components/Header";
+import Header from "./components/Header";
 
 export default function RootLayout({
   children,
@@ -10,7 +10,7 @@ export default function RootLayout({
     <html>
       <head />
       <body className="border-4 border-red-400 p-2 w-full">
-        <Headers />
+        <Header />
         {children}
       </body>
     </html>

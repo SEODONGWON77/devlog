@@ -1,5 +1,5 @@
 import React from "react";
-import MainEtc from "./components/MainEtc";
+import Main from "./components/Main";
 
 type Props = {
   children: React.ReactNode;
@@ -9,7 +9,7 @@ function MainLayout({ children }: Props) {
   return (
     <div className="flex">
       {/* @ts-ignore */}
-      <MainEtc />
+      <Main />
       <div className="w-full">{children}</div>
     </div>
   );

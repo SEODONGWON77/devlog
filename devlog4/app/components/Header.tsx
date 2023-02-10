@@ -1,5 +1,7 @@
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 
 type Props = {};
 
@@ -12,6 +14,9 @@ function Header({}: Props) {
       <Link href="/main" className="bg-cyan-200 rounded px-4 py-2">
         Main Page
       </Link>
+      {
+        process.env.NODE_ENV !== 'production' ? <ReactQueryDevtools initialIsOpen={true} /> : null
+      }
     </nav>
   );
 }

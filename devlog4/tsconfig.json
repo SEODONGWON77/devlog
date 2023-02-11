@@ -30,7 +30,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "models/user.ts", "pages/api/auth/[...nextauth].js"  ],
   "exclude": [
     "node_modules"
   ]

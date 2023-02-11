@@ -1,19 +1,48 @@
 import Link from "next/link";
 import React from "react";
 
-type Props = {};
+import { useSession, signOut } from "next-auth/react";
 
-function Header({}: Props) {
+const Header = () => {
+  const { data } = useSession();
+
   return (
-    <nav className="flex space-x-4 mb-2">
-      {/* <Link href="/" className="bg-blue-200 rounded px-4 py-2">
-        Home
-      </Link> */}
-      <Link href="/main" className="bg-cyan-200 rounded px-4 py-2">
-        Main Page
-      </Link>
+    <nav className="navbar navbar-light bg-light row justify-content-center sticky-top">
+      <div className="container">
+        <div className="col-3 p-0">
+          <Link href="/main" className="bg-cyan-200 rounded px-4 py-2">
+            타이틀
+          </Link>
+        </div>
+        <div className="col-3 mt-3 mt-md-0 text-right d-flex flex-row">
+          <Link href="/main" className="bg-cyan-200 rounded px-4 py-2">
+            메인
+          </Link>
+          {data?.user ? (
+            <>
+              <span className="cursor-pointer">
+                {data?.user?.name}님 안녕하세요.
+              </span>
+
+              <span className="cursor-pointer" onClick={() => signOut()}>
+                Logout
+              </span>
+
+              <Link href="/post" className="bg-cyan-200 rounded px-4 py-2">
+                게시글 등록
+              </Link>
+            </>
+          ) : (
+            <span style={{ marginRight: "15px" }}>
+              <Link className="nav-link" href="auth/login">
+                Login
+              </Link>
+            </span>
+          )}
+        </div>
+      </div>
     </nav>
   );
-}
+};
 
 export default Header;

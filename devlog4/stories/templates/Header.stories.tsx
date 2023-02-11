@@ -8,15 +8,13 @@ export default {
 } as ComponentMeta<typeof Header>;
 
 const Template: ComponentStory<typeof Header> = (args) => {
-
-  const props = { 
-    ...args
+  const props = {
+    ...args,
   };
-
 
   return <Header />;
 };
 
 export const Primary = Template.bind({});
 
-Primary.args = {}
+Primary.args = {};

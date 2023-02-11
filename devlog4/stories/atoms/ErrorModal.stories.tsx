@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import ErrorModal from '../../app/components/error-modal';
+import ErrorModal from '../../app/components/atoms/error-modal';
 
 export default {
   title: "atoms/ErrorModal",

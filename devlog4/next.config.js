@@ -4,10 +4,6 @@ module.exports = {
   experimental: {
     appDir: true,
   },
-  env: {
-    DB_URI: "mongodb://localhost:27017/next13-auth",
-    NEXTAUTH_SECRET: "seodongwon",
-  },
   async redirects() {
     return [
       {

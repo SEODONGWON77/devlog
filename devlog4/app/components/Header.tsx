@@ -1,5 +1,6 @@
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { useSession, signOut } from "next-auth/react";
 
@@ -41,6 +42,7 @@ const Header = () => {
           )}
         </div>
       </div>
+    {process.env.NODE_ENV !== 'production' ? <ReactQueryDevtools initialIsOpen={true} /> : null}
     </nav>
   );
 };

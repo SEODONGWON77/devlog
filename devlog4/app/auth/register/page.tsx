@@ -2,25 +2,26 @@
 
 import axios from "axios";
 import React, { useState } from "react";
-
+import { createAllRestFetchByDevlog } from "../../../utils/api/fetch/devlogApiRestFetch";
+import { RESIGSER } from "./constants";
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const allFetch = createAllRestFetchByDevlog("devlog");
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const { data } = await axios.post("/api/register", {
+      const { data } = await allFetch.postFetch(RESIGSER, {
         name,
         email,
         password,
       });
 
-      console.log(data);
     } catch (error) {
-      console.log(error);
+      console.log("error", error);
     }
   };
 

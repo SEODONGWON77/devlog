@@ -10,7 +10,7 @@ const Header = () => {
   return (
     <nav className="navbar navbar-light bg-light row justify-content-center sticky-top">
       <div className="container">
-        <div className="col-3 p-0">
+        <div className="">
           <Link href="/main" className="bg-cyan-200 rounded px-4 py-2">
             타이틀
           </Link>

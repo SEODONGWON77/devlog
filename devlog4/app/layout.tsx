@@ -5,7 +5,6 @@ import { SessionProvider } from "next-auth/react";
 import { RecoilRoot } from "recoil";
 import "../styles/globals.css";
 import Header from "./components/Header";
-import { getClient } from "./queryClient";
 
 export default function RootLayout({
   children,
@@ -18,7 +17,7 @@ export default function RootLayout({
         <html>
           <head />
           <SessionProvider>
-            <body className="border-4 border-red-400 p-2 w-full h-screen">
+            <body className="border-4 p-2 w-full h-screen">
               <Header />
               {children}
             </body>
@@ -28,3 +27,22 @@ export default function RootLayout({
     </RecoilRoot>
   );
 }
+
+// react-query api
+const getClient = (() => {
+	let client: QueryClient | null = null;
+	return () => {
+		if (!client)
+			client = new QueryClient({
+				defaultOptions: {
+					queries: {
+						cacheTime: 1000 * 60 * 60 * 24,
+						staleTime: 1000 * 60,
+						refetchOnWindowFocus: false,
+						refetchOnMount: false,
+					},
+				},
+			});
+		return client;
+	};
+})();

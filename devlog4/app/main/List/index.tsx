@@ -26,7 +26,9 @@ const Index = ({data}: any) => {
           loader={<h3> Loading...</h3>}
           endMessage={<h4>Nothing more to show</h4>}
         >
-          <List posts={posts}/>
+          <ul className="divide-y divide-slate-100">
+            <List posts={posts}/>
+          </ul>
         </InfiniteScroll>
       }
     </>

@@ -1,14 +1,14 @@
 import React from "react";
-import List, {} from './List';
+import List from './List';
 
 type Props = {};
 
 const Main = async ({}: Props) => {
 
   const listData = await getListData();
-  const userData = await getUsersData();
+  const imgData = await getImgData();
 
-  const data = await Promise.all([listData, userData]);
+  const data = await Promise.all([listData, imgData]);
 
   return (
     <>
@@ -19,22 +19,29 @@ const Main = async ({}: Props) => {
 
 export default Main;
 
-const BASE_URL = "https://fakestoreapi.com";
+const BASE_URL = (queryString?: string): string => `https://fakestoreapi.com${queryString || ''}`;
+const IMG_URL = (queryString?: string): string => {
+  const ACCESS_KEY = "T3sLTB3G47UuyREXMlsQeVPnfUqV7hp47FbcHdUF5NU";
+  return `https://api.unsplash.com/search/photos?page=1&query=${queryString || ''}&client_id=${ACCESS_KEY}&orientation=landscape&per_page=20`
+}
+
 const getListData = async () => {
-  const res = await fetch(`${BASE_URL}/products`, {
+  const url = `${BASE_URL('/products')}`;
+  const res = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': `${BASE_URL}/products`,
+      'Access-Control-Allow-Origin': `${url}`,
     },
   });
   return res.json();
 }
 
-const getUsersData = async () => {
-  const res = await fetch(`${BASE_URL}/users`, {
+const getImgData = async () => {
+  const url = IMG_URL();
+  const res = await fetch(`${url}`, {
     headers: {
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': `${BASE_URL}/users`,
+      'Access-Control-Allow-Origin': `${url}`,
     },
   });
   return res.json();

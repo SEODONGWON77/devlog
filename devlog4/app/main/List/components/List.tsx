@@ -1,7 +1,9 @@
 "use client";
 
 import React, {useState, useEffect} from "react";
+import Link from "next/link";
 import Gallery from "./Gallery";
+import { BASE_URL } from "../constants";
 
 const List = ({posts}: any) => {
 
@@ -11,33 +13,28 @@ const List = ({posts}: any) => {
     let newPk: string;
     return posts.map(({id, title, price, image}: any) => {
 
-      // newPk = `${id}-dv4-${Math.floor(Math.random() * 1000) + 1}`;
+      newPk = `${id}-dv4-${Math.floor(Math.random() * 1000) + 1}`;
       // setUniqueKey(newPk);
-      // console.log('uniqueKey', uniqueKey);
 
       return (
         <li
-          key={`${id}-dv4-${Math.floor(Math.random() * 1000) + 1}`}
+          // key={`${id}-dv4-${Math.floor(Math.random() * 1000) + 1}`}
+          key={newPk}
           className="flex items-start space-x-6 p-6"
           >
           <Gallery
-            key={`${id}-dv4-${Math.floor(Math.random() * 1000) + 1}`}
-            src={image}
+            // key={`${id}-dv4-${Math.floor(Math.random() * 1000) + 1}`}
+            url={image}
             alt={`product-${id}`}
           />
           {/* 링크 태우기 */}
           <div className="min-w-0 relative flex-auto">
-            <h2 className="font-semibold text-slate-900 truncate pr-20">{price}</h2>
-            <dl className="mt-2 flex flex-wrap text-sm leading-6 font-medium">
-             <div className="absolute top-0 right-0 flex items-center space-x-1">
-              <dt className="sr-only">unit</dt>
-              <dd className="text-slate-400">\</dd>
-             </div>
-             <div className="flex-none w-full mt-2 font-normal">
-              <dt className="sr-only">title</dt>
-              <dd className="text-slate-400">{title}</dd>
+            <h2 className="font-semibold text-slate-900 truncate pr-20 cursor-pointer">
+              <Link href={`/post/${id}`}>{title}</Link>
+            </h2>
+            <div className="mt-2 flex flex-wrap text-sm leading-6 font-medium">
+              <div className="w-full mt-2 font-normal text-slate-400">{price}</div>
             </div>
-            </dl>
           </div>
         </li>
       )

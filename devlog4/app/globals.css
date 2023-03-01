@@ -105,3 +105,9 @@ a {
     color-scheme: dark;
   }
 }
+
+.ql-snow .ql-editor .ql-syntax {
+  background-color: #111111;
+  color: #f8f8f2;
+  overflow: visible;
+}

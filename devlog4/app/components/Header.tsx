@@ -8,15 +8,13 @@ const Header = () => {
   const { data } = useSession();
 
   return (
-    <nav className="navbar navbar-light bg-light row justify-content-center sticky-top">
-      <div className="container">
-        <div className="">
-          <Link href="/main" className="bg-cyan-200 rounded px-4 py-2">
-            타이틀
-          </Link>
+    <nav className="navbar">
+      <div className="w-full h-[60px] flex px-[17.5%]">
+        <div className="h-full p-4">
+          <Link href="/main">DevLog</Link>
         </div>
-        <div className="col-3 mt-3 mt-md-0 text-right d-flex flex-row">
-          <Link href="/main" className="bg-cyan-200 rounded px-4 py-2">
+        <div className="flex ml-auto p-4 gap-3">
+          <Link href="/main">
             메인
           </Link>
           {data?.user ? (
@@ -34,15 +32,15 @@ const Header = () => {
               </Link>
             </>
           ) : (
-            <span style={{ marginRight: "15px" }}>
-              <Link className="nav-link" href="auth/login">
-                Login
-              </Link>
-            </span>
+            <Link className="nav-link" href="auth/login">
+              Login
+            </Link>
           )}
         </div>
       </div>
-    {process.env.NODE_ENV !== 'production' ? <ReactQueryDevtools initialIsOpen={true} /> : null}
+      {process.env.NODE_ENV !== "production" ? (
+        <ReactQueryDevtools initialIsOpen={true} />
+      ) : null}
     </nav>
   );
 };

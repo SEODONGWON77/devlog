@@ -40,6 +40,7 @@ const getProductsData = async () => {
   return res.json();
 };
 
+// 이미지 보관을 따로 하는 경우에 적용
 // const getImgData = async () => {
 //   const url = IMG_URL();
 //   const res = await fetch(`${url}`, {

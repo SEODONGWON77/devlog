@@ -1,20 +1,19 @@
 "use client";
 
-import axios from "axios";
 import React, { useState } from "react";
 import { createAllRestFetchByDevlog } from "../../../utils/api/fetch/devlogApiRestFetch";
-import { RESIGSER } from "./constants";
+
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const allFetch = createAllRestFetchByDevlog("devlog");
+  const allFetch = createAllRestFetchByDevlog("register");
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const { data } = await allFetch.postFetch(RESIGSER, {
+      const { data } = await allFetch.postFetch("", {
         name,
         email,
         password,

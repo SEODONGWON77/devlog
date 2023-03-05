@@ -4,19 +4,16 @@ import { BASE_URL } from "../constants";
 
 const Gallery = (props: any) => {
   const {url, alt} = props;
-  const src = url.replace(BASE_URL('/img'), '');
+  const src = url;
+  const loaderTest = () => url;
 
-  const loaderTest = () => {
-    return BASE_URL(`/img${src}`);
-  }
   return (
     <div>
       <Image
         loader={loaderTest}
         src={src}
         alt={alt}
-        className={imgStyle}
-        width={60}
+        width={500}
         height={88}
       />
     </div>
@@ -24,5 +21,3 @@ const Gallery = (props: any) => {
 };
 
 export default Gallery;
-
-const imgStyle = `flex-none rounded-md bg-slate-100 hover:object-fill`;

@@ -1,11 +1,22 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { useSession, signOut } from "next-auth/react";
+import { useSetRecoilState } from 'recoil';
+import { userNameState } from "../recoil/state";
 
 const Header = () => {
   const { data } = useSession();
+
+  const userName: any = data?.user?.name;
+  const setUserName = useSetRecoilState(userNameState);
+
+  useEffect(() => {
+    setUserName(userName);
+  }, [userName]);
 
   return (
     <nav className="navbar">
@@ -20,7 +31,7 @@ const Header = () => {
           {data?.user ? (
             <>
               <span className="cursor-pointer">
-                {data?.user?.name}님 안녕하세요.
+                {userName}님 안녕하세요.
               </span>
 
               <span className="cursor-pointer" onClick={() => signOut()}>

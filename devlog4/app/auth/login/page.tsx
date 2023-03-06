@@ -5,11 +5,8 @@ import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Url } from "url";
-import { useSetRecoilState } from 'recoil';
-import { userEmailState, userNameState } from "../../recoil/state";
 
 const Login = () => {
-  const setUserEmail = useSetRecoilState(userEmailState);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -24,7 +21,6 @@ const Login = () => {
     if (response?.error) {
       console.log("error", response?.error);
     } else {
-      setUserEmail(email);
       router.push(response?.url as string);
     }
   };

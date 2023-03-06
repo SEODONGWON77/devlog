@@ -6,17 +6,22 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { useSession, signOut } from "next-auth/react";
 import { useSetRecoilState } from 'recoil';
-import { userNameState } from "../recoil/state";
+import { userEmailState, userNameState } from "../recoil/state";
 
 const Header = () => {
   const { data } = useSession();
 
   const userName: any = data?.user?.name;
+  const userEmail: any = data?.user?.email;
+
   const setUserName = useSetRecoilState(userNameState);
+  const setUserEmail = useSetRecoilState(userEmailState);
 
   useEffect(() => {
+    console.log('콘솔 userName: ', userName, ', userEmail', userEmail);
     setUserName(userName);
-  }, [userName]);
+    setUserEmail(userEmail);
+  }, [userEmail, userName]);
 
   return (
     <nav className="navbar">

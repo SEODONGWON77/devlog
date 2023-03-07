@@ -32,7 +32,6 @@ function Post({}: Props) {
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
       await allFetch.postFetch("/", {
         name,
@@ -46,7 +45,7 @@ function Post({}: Props) {
   return (
     <div className="bg-cyan-400">
       <div className="row mt-5 d-flex justify-content-center">
-        <div className="w-[1200px] h-[400px]">
+        <div className="w-[1200px] h-screen">
           <Editor htmlStr={htmlStr} setHtmlStr={setHtmlStr} />
         </div>
         <div className="col-10 col-lg-5 ">

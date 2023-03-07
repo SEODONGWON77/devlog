@@ -1,11 +1,27 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { useSession, signOut } from "next-auth/react";
+import { useSetRecoilState } from 'recoil';
+import { userEmailState, userNameState } from "../recoil/state";
 
 const Header = () => {
   const { data } = useSession();
+
+  const userName: any = data?.user?.name;
+  const userEmail: any = data?.user?.email;
+
+  const setUserName = useSetRecoilState(userNameState);
+  const setUserEmail = useSetRecoilState(userEmailState);
+
+  useEffect(() => {
+    console.log('콘솔 userName: ', userName, ', userEmail', userEmail);
+    setUserName(userName);
+    setUserEmail(userEmail);
+  }, [userEmail, userName]);
 
   return (
     <nav className="navbar">
@@ -20,7 +36,7 @@ const Header = () => {
           {data?.user ? (
             <>
               <span className="cursor-pointer">
-                {data?.user?.name}님 안녕하세요.
+                {userName}님 안녕하세요.
               </span>
 
               <span className="cursor-pointer" onClick={() => signOut()}>

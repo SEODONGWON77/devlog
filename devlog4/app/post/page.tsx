@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import { useRecoilValue } from 'recoil';
+import { userEmailState, userNameState } from "../recoil/state";
 import { createAllRestFetchByDevlog } from "utils/api/fetch/devlogApiRestFetch";
 import "react-quill/dist/quill.bubble.css";
 import Editor from "app/components/Editor";
@@ -8,6 +10,9 @@ type Props = {};
 function Post({}: Props) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const userName = useRecoilValue(userNameState);
+  const userEmail = useRecoilValue(userEmailState);
+
   const [password, setPassword] = useState("");
   const allFetch = createAllRestFetchByDevlog("post");
   const [htmlStr, setHtmlStr] = useState<string>("");
@@ -61,7 +66,7 @@ function Post({}: Props) {
                 type="text"
                 id="name_field"
                 className="form-control"
-                value={name}
+                value={userName}
                 onChange={(e) => setName(e.target.value)}
               />
             </div>

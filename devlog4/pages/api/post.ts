@@ -1,23 +1,30 @@
-import Post from 'models/post'
-import dbConnect from 'config/dbConnect'
-import { NextApiRequest, NextApiResponse } from 'next'
+import Post from "models/post";
+import dbConnect from "config/dbConnect";
+import { NextApiRequest, NextApiResponse } from "next";
+import Counter from "models/counter";
 
-export default async function handler(req:NextApiRequest, res:NextApiResponse) {
-    if(req.method === 'POST') {
-        dbConnect();
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  dbConnect();
+  if (req.method === "POST") {
+    const { name, htmlStr } = req.body;
+    let { seq } = await Counter.findByIdAndUpdate("userid", {
+      $inc: { seq: 1 },
+    });
 
-        const {name, htmlStr} = req.body;
+    const post = await Post.create({
+      name: name,
+      htmlStr: htmlStr,
+      index: seq === null ? 0 : seq,
+    });
 
-        const post = await Post.create({name, htmlStr});
+    res.status(201).json({ post });
+  }
 
-        res.status(201).json({ post });
-    }
-
-    if(req.method === 'GET') {
-        dbConnect();
-
-        const name = "서동원"
-        const result = await Post.find({name});
-        res.status(201).json({ result });
-    }
+  if (req.method === "GET") {
+    const result = await Post.find();
+    res.status(201).json({ result });
+  }
 }

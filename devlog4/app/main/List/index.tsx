@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Quill } from "react-quill";
-import "react-quill/dist/quill.core.css"
-import "react-quill/dist/quill.snow.css"
-import "react-quill/dist/quill.bubble.css"
+import "react-quill/dist/quill.core.css";
+import "react-quill/dist/quill.snow.css";
+import "react-quill/dist/quill.bubble.css";
 import { createAllRestFetchByDevlog } from "utils/api/fetch/devlogApiRestFetch";
 import List from "./components/List";
-
+import { useRecoilValue } from "recoil";
+import { userEmailState, userNameState } from "../../recoil/state";
 const Index = () => {
-
   const [postList, setPostList] = useState<any>([]);
   const [hasMore, setHasMore] = useState(true);
-
+  const userName = useRecoilValue(userNameState);
   const allFetch = createAllRestFetchByDevlog("post");
   const fetchPost = async () => {
     let res = await allFetch.getFetch("/");
@@ -36,29 +36,25 @@ const Index = () => {
 
   const infiniteScrollProps: any = () => {
     const Component = {
-      loading: () => (<h3> Loading...</h3>),
-      endMessage: () => (<h4>Nothing more to show</h4>),
-    }
+      loading: () => <h3> Loading...</h3>,
+      endMessage: () => <h4>Nothing more to show</h4>,
+    };
     return {
       dataLength: postList.length,
       next: fetchPost,
       hasMore: hasMore,
       loader: Component.loading(),
       endMessage: Component.endMessage(),
-    }
-  }
+    };
+  };
 
   return (
     <>
-      {
-        postList && 
-        <InfiniteScroll
-          {...infiniteScrollProps()}
-          className='columns-4 m-1'
-          >
-          <List posts={postList}/>
+      {postList && (
+        <InfiniteScroll {...infiniteScrollProps()} className="columns-4 m-1">
+          <List posts={postList} />
         </InfiniteScroll>
-      }
+      )}
     </>
   );
 };
@@ -92,7 +88,7 @@ export default Index;
 //   return (
 //     <>
 //       {
-//         posts && 
+//         posts &&
 //         <InfiniteScroll
 //           {...infiniteScrollProps()}
 //           >

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue } from "recoil";
 import { userEmailState, userNameState } from "../recoil/state";
 import { createAllRestFetchByDevlog } from "utils/api/fetch/devlogApiRestFetch";
 import "react-quill/dist/quill.bubble.css";
@@ -24,8 +24,7 @@ function Post({}: Props) {
     } catch (error) {
       console.log("error", error);
     }
-  }, [])
-  
+  }, []);
 
   useEffect(() => {
     if (viewContainerRef.current) {
@@ -39,7 +38,7 @@ function Post({}: Props) {
     e.preventDefault();
     try {
       await allFetch.postFetch("/", {
-        name,
+        userName,
         htmlStr,
       });
     } catch (error) {
@@ -58,23 +57,11 @@ function Post({}: Props) {
             className="border border-secondary rounded p-4"
             onSubmit={submitHandler}
           >
-            <div className="form-outline mb-4">
-              <label className="form-label" htmlFor="name_field">
-                Name
-              </label>
-              <input
-                type="text"
-                id="name_field"
-                className="form-control"
-                value={userName}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
             <button
               type="submit"
               className="btn btn-block w-100 btn-primary btn-block mb-4"
             >
-              Register
+              등록등록등록등록등록등록등록등록등록등록등록등록등록등록등록등록등록
             </button>
           </form>
         </div>

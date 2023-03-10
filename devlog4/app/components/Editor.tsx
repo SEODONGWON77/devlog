@@ -5,16 +5,21 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { RangeStatic } from "quill";
 import dayjs from "dayjs";
-
+import hljs from "highlightjs";
+import "highlightjs/styles/vs2015.css";
 interface IEditor {
   htmlStr: string;
   setHtmlStr: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const ACCESS_KEY =        process.env.NEXT_PUBLIC_ACCESS_KEY;
+hljs.configure({
+  languages: ["javascript", "ruby", "python", "rust"],
+});
+
+const ACCESS_KEY = process.env.NEXT_PUBLIC_ACCESS_KEY;
 const SECRET_ACCESS_KEY = process.env.NEXT_PUBLIC_SECRET_ACCESS_KEY;
-const REGION =            process.env.NEXT_PUBLIC_REGION;
-const S3_BUCKET =         process.env.NEXT_PUBLIC_S3_BUCKET;
+const REGION = process.env.NEXT_PUBLIC_REGION;
+const S3_BUCKET = process.env.NEXT_PUBLIC_S3_BUCKET;
 
 AWS.config.update({
   accessKeyId: ACCESS_KEY,
@@ -85,29 +90,24 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr }) => {
   // useMemo를 사용하지 않고 handler를 등록할 경우 타이핑 할때마다 focus가 벗어남
   const modules = React.useMemo(
     () => ({
+      syntax: {
+        highlight: (text: string) => hljs.highlightAuto(text).value,
+      },
       toolbar: {
         // container에 등록되는 순서대로 tool 배치
         container: [
           [{ font: [] }], // font 설정
           [{ header: [1, 2, 3, 4, 5, 6, false] }], // header 설정
-          [
-            "bold",
-            "italic",
-            "underline",
-            "strike",
-            "blockquote",
-            "code-block",
-            "formula",
-          ], // 굵기, 기울기, 밑줄 등 부가 tool 설정
+          ["bold", "italic", "underline", "strike", "blockquote", "code-block"], // 굵기, 기울기, 밑줄 등 부가 tool 설정
           [
             { list: "ordered" },
             { list: "bullet" },
             { indent: "-1" },
             { indent: "+1" },
           ], // 리스트, 인덴트 설정
-          ["link", "image", "video"], // 링크, 이미지, 비디오 업로드 설정
+          ["link", "image"], // 링크, 이미지, 비디오 업로드 설정
           [{ align: [] }, { color: [] }, { background: [] }], // 정렬, 글씨 색깔, 글씨 배경색 설정
-          ["clean"], // toolbar 설정 초기화 설정
+          // ["clean"], // toolbar 설정 초기화 설정
         ],
 
         // custom 핸들러 설정
@@ -135,7 +135,6 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr }) => {
     "indent",
     "link",
     "image",
-    "video",
     "align",
     "color",
     "background",

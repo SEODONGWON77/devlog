@@ -2,8 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+.ql-toolbar.ql-snow {
+  border: 1px solid #e5e7eb;
+}
+
+.ql-container.ql-snow {
+  border: 1px solid #e5e7eb;
+}
+
 .ql-snow .ql-editor pre.ql-syntax {
-    background-color: #111111;
-    color: #333333;
-    overflow: visible;
-  }
+  background-color: #f7dcda;
+  color: #333333;
+  overflow: visible;
+}
+
+.ql-toolbar {
+  position: sticky;
+  z-index: 20;
+}
+
+.ql-container {
+  overflow-x: auto;
+  height: 740px;
+}

@@ -3,7 +3,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRecoilValue } from "recoil";
 import { userEmailState, userNameState } from "../recoil/state";
 import { createAllRestFetchByDevlog } from "utils/api/fetch/devlogApiRestFetch";
+import "react-quill/dist/quill.core.css";
+import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
+import "../../styles/globals.css";
 import Editor from "app/components/Editor";
 type Props = {};
 
@@ -34,8 +37,7 @@ function Post({}: Props) {
     }
   }, [htmlStr]);
 
-  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const submitHandler = async () => {
     try {
       await allFetch.postFetch("/", {
         userName,
@@ -45,25 +47,31 @@ function Post({}: Props) {
       console.log("error", error);
     }
   };
-
   return (
-    <div className="bg-cyan-400">
-      <div className="row mt-5 d-flex justify-content-center">
-        <div className="w-[1200px] h-screen">
+    <div className="">
+      <div className="flex justify-center gap-2 mb-2">
+        <div className="ql-snow w-[768px]">
+          <div className="my-2">WRITING</div>
           <Editor htmlStr={htmlStr} setHtmlStr={setHtmlStr} />
         </div>
-        <div className="col-10 col-lg-5 ">
-          <form
-            className="border border-secondary rounded p-4"
-            onSubmit={submitHandler}
-          >
-            <button
-              type="submit"
-              className="btn btn-block w-100 btn-primary btn-block mb-4"
-            >
-              등록등록등록등록등록등록등록등록등록등록등록등록등록등록등록등록등록
-            </button>
-          </form>
+        <div className="ql-snow w-[768px] h-[784px]">
+          <div className="my-2">PREVIEW</div>
+          <div
+            className="ql-editor bg-slate-100"
+            dangerouslySetInnerHTML={{
+              __html: htmlStr,
+            }}
+          />
+        </div>
+      </div>
+      <div className="m-auto w-[1544px]">
+        <div className="flex border p-4 w-full items-center">
+          <div className="">
+            <input placeholder="태그를 입력하세요."></input>
+          </div>
+          <div className="ml-auto">
+            <button onClick={() => submitHandler()}>등록</button>
+          </div>
         </div>
       </div>
     </div>

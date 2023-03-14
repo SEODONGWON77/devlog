@@ -51,7 +51,7 @@ const Index = () => {
   return (
     <>
       {postList && (
-        <InfiniteScroll {...infiniteScrollProps()} className="columns-4 m-1">
+        <InfiniteScroll {...infiniteScrollProps()} className="flex flex-wrap content-center justify-center">
           <List posts={postList} />
         </InfiniteScroll>
       )}

@@ -56,16 +56,18 @@ const List = ({posts}: any) => {
       return (
         <div
           key={index}
-          className="m-0.5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-          <Gallery
-            url={image}
-            alt={`product-${index}`}
-          />
-          <div className="p-5">
-              <h5 {...titleProps(index)} className="cursor-pointer mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{imsiTitle}</h5>
-              <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{imsiCont}</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">{name}</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">{imsiDate}</p>
+          className="m-7 w-64 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+          <div>
+            <Gallery
+              url={image}
+              alt={`product-${index}`}
+            />
+            <div className="p-5">
+                <h5 {...titleProps(index)} className="cursor-pointer mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{imsiTitle}</h5>
+                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{imsiCont}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{name}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{imsiDate}</p>
+            </div>
           </div>
         </div>
       )

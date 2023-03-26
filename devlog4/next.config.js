@@ -10,13 +10,13 @@ module.exports = {
     REGION: process.env.NEXT_PUBLIC_REGION,
     S3_BUCKET: process.env.NEXT_PUBLIC_S3_BUCKET,
   },
-  // async redirects() {
-  //   return [
-  //     {
-  //       source: "/",
-  //       destination: "/main",
-  //       permanent: true,
-  //     },
-  //   ];
-  // },
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/main",
+        permanent: true,
+      },
+    ];
+  },
 };

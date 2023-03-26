@@ -10,29 +10,29 @@ import { createAllRestFetchByDevlog } from "utils/api/fetch/devlogApiRestFetch";
 import List from "./components/List";
 import { useRecoilValue } from "recoil";
 import { userEmailState, userNameState } from "../../recoil/state";
+import { useQuery } from "@tanstack/react-query";
+const allFetch = createAllRestFetchByDevlog("post");
+
+const fetchPost = async () => {
+  let res = await allFetch.getFetch("/");
+  if (res.result && res.result.length == 0) {
+    alert("조회된 결과가 없습니다");
+  }
+  return res.result;
+};
+
 const Index = () => {
   const [postList, setPostList] = useState<any>([]);
   const [hasMore, setHasMore] = useState(true);
   const userName = useRecoilValue(userNameState);
-  const allFetch = createAllRestFetchByDevlog("post");
-  const fetchPost = async () => {
-    let res = await allFetch.getFetch("/");
-    if (res.result && res.result.length == 0) {
-      alert("조회된 결과가 없습니다");
-    } else {
-      setPostList(res.result);
-    }
-  };
 
-  useEffect(() => {
-    fetchPost();
-    // var quill = new Quill('#editor', {
-    //   modules: {
-    //     toolbar: false    // Snow includes toolbar by default
-    //   },
-    //   theme: 'snow'
-    // });
-  }, []);
+  const { data, isLoading, error } = useQuery(["posts"], fetchPost, {
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    staleTime: 5000,
+    cacheTime: Infinity,
+  });
 
   const infiniteScrollProps: any = () => {
     const Component = {
@@ -47,12 +47,15 @@ const Index = () => {
       endMessage: Component.endMessage(),
     };
   };
-
+  
   return (
     <>
-      {postList && (
-        <InfiniteScroll {...infiniteScrollProps()} className="flex flex-wrap content-center justify-center">
-          <List posts={postList} />
+      {!isLoading && data && (
+        <InfiniteScroll
+          {...infiniteScrollProps()}
+          className="flex flex-wrap content-center justify-center"
+        >
+          <List posts={data} />
         </InfiniteScroll>
       )}
     </>
@@ -60,44 +63,3 @@ const Index = () => {
 };
 
 export default Index;
-
-// const Index = ({data}: any) => {
-//   const [posts, setPosts] = useState(data[0]);
-//   const [hasMore, setHasMore] = useState(true);
-//   const infiniteScrollProps: any = () => {
-//     const getMorePost = async () => {
-//       const allFetch = createAllRestFetchByDevlog("post");
-//       const res = await allFetch.getFetch("/");
-//       if (res.result && res.result.length == 0) {
-//         alert("조회된 결과가 없습니다");
-//       }
-//       setPosts((post: any) => [...post, ...res.result]);
-//     };
-//     const Component = {
-//       loading: () => (<h3> Loading...</h3>),
-//       endMessage: () => (<h4>Nothing more to show</h4>),
-//     }
-//     return {
-//       dataLength: posts.length,
-//       next: getMorePost,
-//       hasMore: hasMore,
-//       loader: Component.loading(),
-//       endMessage: Component.endMessage(),
-//     }
-//   }
-//   return (
-//     <>
-//       {
-//         posts &&
-//         <InfiniteScroll
-//           {...infiniteScrollProps()}
-//           >
-//           <ul className="divide-y divide-slate-100">
-//             <List posts={posts}/>
-//           </ul>
-//         </InfiniteScroll>
-//       }
-//     </>
-//   );
-// };
-// export default Index;

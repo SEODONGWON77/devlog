@@ -56,7 +56,8 @@ const List = ({posts}: any) => {
       return (
         <div
           key={index}
-          className="m-7 w-64 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+          className="cursor-pointer m-7 w-64 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+          {...titleProps(index)}>
           <div>
             <Gallery
               url={image}

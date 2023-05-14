@@ -9,6 +9,7 @@ module.exports = {
     SECRET_ACCESS_KEY: process.env.NEXT_PUBLIC_SECRET_ACCESS_KEY,
     REGION: process.env.NEXT_PUBLIC_REGION,
     S3_BUCKET: process.env.NEXT_PUBLIC_S3_BUCKET,
+    ELASTIC_SEARCH_URI: process.env.ELASTIC_SEARCH_URI,
   },
   async redirects() {
     return [

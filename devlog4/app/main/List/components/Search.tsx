@@ -1,14 +1,14 @@
 "use client";
 
+import axios from "axios";
 import React from "react";
-import { createGetRestFetchBySearch } from "utils/api/fetch/devlogApiRestFetch";
 import { searchDropDownList } from "../constants";
 import Animation from "./Animation";
 import DropDown from "./DropDown";
 const Search = () => {
   const submitHandler = async () => {
     try {
-      await createGetRestFetchBySearch("", "get")("");
+      await axios.post("/_search/");
     } catch (error) {
       console.log("error", error);
     }

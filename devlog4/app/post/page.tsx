@@ -8,7 +8,7 @@ import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
 import "../../styles/globals.css";
 import Editor from "app/components/Editor";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 type Props = {};
 
 function Post({}: Props) {
@@ -42,7 +42,7 @@ function Post({}: Props) {
 
   const submitHandler = async () => {
     try {
-      await allFetch.postFetch("/", {
+      await allFetch.postFetch("", {
         userName,
         htmlStr,
         title,

@@ -15,7 +15,7 @@ module.exports = {
     return [
       {
         source: "/_search/:path*",
-        destination: "http://14.4.75.234:9200/_search/:path*",
+        destination: "http://14.4.75.234:9200/test.posts/_search/:path*",
       },
     ];
   },

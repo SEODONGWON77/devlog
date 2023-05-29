@@ -13,6 +13,7 @@ export default async function handler(
     let { seq } = await Counter.findByIdAndUpdate("userid", {
       $inc: { seq: 1 },
     });
+
     const post = await Post.create({
       name: name,
       htmlStr: htmlStr,

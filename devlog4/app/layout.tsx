@@ -18,7 +18,6 @@ export default function RootLayout({
           <head />
           <SessionProvider>
             <body className="w-full h-screen">
-              <Header />
               {children}
             </body>
           </SessionProvider>

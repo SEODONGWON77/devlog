@@ -9,11 +9,10 @@ export default async function handler(
 ) {
   dbConnect();
   if (req.method === "POST") {
-    const { name, htmlStr, title, shortContent } = req.body;
+    const { name, htmlStr, title, shortContent, tagList } = req.body;
     let { seq } = await Counter.findByIdAndUpdate("userid", {
       $inc: { seq: 1 },
     });
-
     const post = await Post.create({
       name: name,
       htmlStr: htmlStr,
@@ -22,6 +21,7 @@ export default async function handler(
       createDt: new Date(),
       updateDt: new Date(),
       index: seq === null ? 0 : seq,
+      tagList: tagList,
     });
     res.status(201).json({ post });
   }

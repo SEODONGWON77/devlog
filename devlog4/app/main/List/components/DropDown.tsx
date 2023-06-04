@@ -2,6 +2,7 @@
 import React, { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import SearchInput from "./search-input";
+import Image from "next/image";
 
 interface SearchProps {
   searchString: string;
@@ -22,21 +23,17 @@ const DropDown = ({
   isSearch,
 }: SearchProps) => {
   return (
-    <form onSubmit={() => undefined}>
-      <div className="w-full h-[3.75rem] flex">
-        <div className="w-[38.75rem] box-border h-full border border-solid border-lightGray-20 rounded-lg">
-          <span data-for="tooltip" data-tip>
-            <SearchInput
-              searchWord={searchWord}
-              changeSearchWord={changeSearchWord}
-              onKeyUp={searchBarKeyUp}
-              placeholder="검색어를 입력해주세요."
-            />
-          </span>
-        </div>
+    <div className="w-full h-[3rem] p-[2px] flex border border-solid border-lightGray-20 rounded-md">
+      <div className="w-[30px] mt-3 ml-3">
+        <Image src={"/search.png"} width={20} height={20} alt="" />
       </div>
-      {isSearch && <div>검색성공 f12 확인</div>}
-    </form>
+      <SearchInput
+        searchWord={searchWord}
+        changeSearchWord={changeSearchWord}
+        onKeyUp={searchBarKeyUp}
+        placeholder={`검색어를 입력해주세요.`}
+      />
+    </div>
   );
 };
 

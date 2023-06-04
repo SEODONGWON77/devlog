@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, Fragment } from "react";
 import Link from "next/link";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { useSession, signOut } from "next-auth/react";
-import { useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from "recoil";
 import { userEmailState, userNameState } from "../recoil/state";
 
 const Header = () => {
@@ -18,35 +18,33 @@ const Header = () => {
   const setUserEmail = useSetRecoilState(userEmailState);
 
   useEffect(() => {
-    console.log('콘솔 userName: ', userName, ', userEmail', userEmail);
+    console.log("콘솔 userName: ", userName, ", userEmail", userEmail);
     setUserName(userName);
     setUserEmail(userEmail);
   }, [userEmail, userName]);
 
   return (
     <nav className="navbar">
-      <div className="w-full h-[60px] flex px-[17.5%]">
-        <div className="h-full p-4">
+      <div className="w-full h-[60px] flex px-[12.5%] text-white">
+        <div className="h-full p-4 text-2xl font-bold">
           <Link href="/main">DevLog</Link>
         </div>
         <div className="flex ml-auto p-4 gap-3">
-          <Link href="/main">
-            메인
-          </Link>
+          <Link href="/main">메인</Link>
           {data?.user ? (
-            <>
-              <span className="cursor-pointer">
-                {userName}님 안녕하세요.
-              </span>
-
+            <Fragment>
+              <span className="cursor-pointer">{userName}님 안녕하세요.</span>
               <span className="cursor-pointer" onClick={() => signOut()}>
                 Logout
               </span>
 
-              <Link href="/post" className="bg-cyan-200 rounded px-4 py-2">
-                게시글 등록
+              <Link
+                href="/post"
+                className="bg-[#08a4ff] rounded px-4 flex items-center mt-[-2px]"
+              >
+                <span className="text-sm">게시글 등록</span>
               </Link>
-            </>
+            </Fragment>
           ) : (
             <Link className="nav-link" href="auth/login">
               Login

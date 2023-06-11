@@ -25,3 +25,8 @@
   overflow-x: auto;
   height: 650px;
 }
+
+.ql-snow .ql-editor blockquote {
+  background-color: #ededed;
+  padding: 13px 15px 13px 15px;
+}

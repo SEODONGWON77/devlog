@@ -9,6 +9,8 @@ import "react-quill/dist/quill.bubble.css";
 import "../../styles/globals.css";
 import Editor from "app/components/Editor";
 import { useRouter } from "next/navigation";
+import ThumbnailModal from "./components/thumbnail-modal/ThumbnailModal";
+import { toast } from "react-toastify";
 
 type Props = {};
 
@@ -21,6 +23,8 @@ function Post({}: Props) {
   const [htmlStr, setHtmlStr] = useState<string>("");
   const viewContainerRef = useRef<HTMLDivElement>(null);
   const tagList = useRef<string[]>([]);
+  const [isNameChangeOpen, setIsNameChangeOpen] = useState(false);
+
   useEffect(() => {
     if (viewContainerRef.current) {
       viewContainerRef.current.innerHTML =
@@ -67,37 +71,53 @@ function Post({}: Props) {
     return filteredTextList;
   };
 
+  const newTitle = useRef<string>("");
+
+  const handleTitleChange = (text: string) => {
+    newTitle.current = text;
+  };
+
+  const handleSubmit = () => {
+    if (newTitle.current === null) {
+      toast.error("이름이 입력되지 않았습니다.");
+      return;
+    } else {
+      closeModal();
+    }
+  };
+
+  const closeModal = () => {
+    newTitle.current = "";
+    setIsNameChangeOpen(false);
+  };
+
+  const handleShortContent = (value: string) => {
+    setShortContent(value);
+  };
+
   return (
     <div className="w-full mt-10">
-      <div className="flex justify-center gap-2 mb-2">
-        <div className="ql-snow w-[768px]">
-          <div className="flex gap-2 items-center h-10">
-            <span>제목 : </span>
-            <input
-              className="w-[500px] outline-none"
-              type="text"
-              onChange={(e) => setTitle(e.target.value)}
+      <div className="m-auto w-[1544px] mb-2">
+        <input
+          className="w-[500px] h-[50px] outline-none text-4xl"
+          type="text"
+          placeholder="제목을 입력하세요."
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <div className="flex w-full gap-2">
+          <div className="ql-snow w-[768px]">
+            <div className="my-2">WRITING</div>
+            <Editor htmlStr={htmlStr} setHtmlStr={setHtmlStr} />
+          </div>
+          <div className="ql-snow w-[768px] h-[693px]">
+            <div className="my-2">PREVIEW</div>
+            <div
+              className="ql-editor bg-slate-50  border border-solid border-lightGray-20"
+              dangerouslySetInnerHTML={{
+                __html: htmlStr,
+              }}
             />
           </div>
-          <div className="flex gap-2 items-center h-10">
-            <span>소개 : </span>
-            <input
-              className="w-[500px] outline-none"
-              type="text"
-              onChange={(e) => setShortContent(e.target.value)}
-            />
-          </div>
-          <div className="my-2">WRITING</div>
-          <Editor htmlStr={htmlStr} setHtmlStr={setHtmlStr} />
-        </div>
-        <div className="ql-snow w-[768px] h-[774px]">
-          <div className="my-2">PREVIEW</div>
-          <div
-            className="ql-editor bg-slate-50  border border-solid border-lightGray-20"
-            dangerouslySetInnerHTML={{
-              __html: htmlStr,
-            }}
-          />
         </div>
       </div>
       <div className="m-auto w-[1544px]">
@@ -109,9 +129,19 @@ function Post({}: Props) {
           ></input>
           <div className="ml-auto">
             <button onClick={() => submitHandler()}>등록</button>
+            {/* <button onClick={() => setIsNameChangeOpen(true)}>다음</button> */}
           </div>
         </div>
       </div>
+      {isNameChangeOpen && (
+        <ThumbnailModal
+          isNameChangeOpen={isNameChangeOpen}
+          closeModal={closeModal}
+          handleTitleChange={handleTitleChange}
+          handleSubmit={handleSubmit}
+          handleShortContent={handleShortContent}
+        />
+      )}
     </div>
   );
 }

@@ -23,11 +23,44 @@
 
 .ql-container {
   overflow-x: auto;
-  height: 650px;
+  height: 300px;
 }
 
-.ql-snow .ql-editor blockquote {
-  background-color: #ededed;
-  padding: 13px 15px 13px 15px;
+.abr > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1rem * var(--tw-space-y-reverse));
 }
-
+.bbi {
+    --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+.bac {
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+.aql {
+    padding: 0.5rem;
+}
+.ajm {
+    --tw-bg-opacity: 1;
+    background-color: rgb(79 70 229 / var(--tw-bg-opacity));
+}
+.adn {
+    border-radius: 9999px;
+}
+.bin:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(99 102 241 / var(--tw-bg-opacity));
+}
+.rw {
+  width: 1.25rem;
+}
+.nu {
+  height: 1.25rem;
+}
+img, svg, video, canvas, audio, iframe, embed, object {
+  display: block;
+  vertical-align: middle;
+} 

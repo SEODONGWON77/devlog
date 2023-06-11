@@ -5,6 +5,19 @@ import { useRouter } from 'next/navigation';
 import { useRecoilValue } from 'recoil';
 import { userEmailState, userNameState } from "../../recoil/state";
 
+import { createAllRestFetchByDevlog } from "utils/api/fetch/devlogApiRestFetch";
+import { useQuery } from "@tanstack/react-query";
+const allFetch = createAllRestFetchByDevlog("post");
+
+
+const fetchPost = async () => {
+  let res = await allFetch.getFetch("/");
+  if (res.result && res.result.length == 0) {
+    alert("조회된 결과가 없습니다");
+  }
+  return res.result;
+};
+
 type Props = {
   params: any
 };
@@ -14,6 +27,16 @@ const DetailId = ({params: {detailId}}: Props) => {
   const [id, setId] = useState("");
   const userEmail = useRecoilValue(userEmailState);
   const userName = useRecoilValue(userNameState);
+
+  const { data, isLoading, error } = useQuery(["posts"], fetchPost, {
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    staleTime: 5000,
+    cacheTime: Infinity,
+  });
+
+  console.log('콘솔 data', data);
 
   useEffect(() => {
     setId(detailId);
@@ -31,4 +54,3 @@ const DetailId = ({params: {detailId}}: Props) => {
 }
 
 export default DetailId;
-

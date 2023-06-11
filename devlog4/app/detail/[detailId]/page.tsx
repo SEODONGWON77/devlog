@@ -31,3 +31,4 @@ const DetailId = ({params: {detailId}}: Props) => {
 }
 
 export default DetailId;
+

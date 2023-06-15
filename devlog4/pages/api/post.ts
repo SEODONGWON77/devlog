@@ -27,7 +27,7 @@ export default async function handler(
   }
 
   if (req.method === "GET") {
-    const result = await Post.find();
+    const result = await Post.find(req.query);
     res.status(201).json({ result });
   }
 }

@@ -8,29 +8,22 @@ import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
 import "../../styles/globals.css";
 import Editor from "app/components/Editor";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import ThumbnailModal from "./components/thumbnail-modal/ThumbnailModal";
+import { toast } from "react-toastify";
+
 type Props = {};
 
 function Post({}: Props) {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
   const userName = useRecoilValue(userNameState);
-  const userEmail = useRecoilValue(userEmailState);
-
   const [title, setTitle] = useState("");
   const [shortContent, setShortContent] = useState("");
   const allFetch = createAllRestFetchByDevlog("post");
   const [htmlStr, setHtmlStr] = useState<string>("");
   const viewContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    try {
-      allFetch.getFetch("/");
-    } catch (error) {
-      console.log("error", error);
-    }
-  }, []);
+  const tagList = useRef<string[]>([]);
+  const [isNameChangeOpen, setIsNameChangeOpen] = useState(false);
 
   useEffect(() => {
     if (viewContainerRef.current) {
@@ -42,11 +35,12 @@ function Post({}: Props) {
 
   const submitHandler = async () => {
     try {
-      await allFetch.postFetch("/", {
+      await allFetch.postFetch("", {
         userName,
         htmlStr,
         title,
         shortContent,
+        tagList: tagList.current,
       });
       alert("저장되었습니다.");
       router.push("/main");
@@ -55,44 +49,99 @@ function Post({}: Props) {
     }
   };
 
+  const onChangeHandler = (text: string) => {
+    const modifyText = text.replace(/\s+/g, " ");
+    tagList.current = getSplitTagList(modifyText);
+  };
+
+  const getSplitTagList = (text: string) => {
+    if (text.trim() === "") {
+      return [];
+    }
+    const filteredTextList = Array.from(
+      new Set(
+        text
+          .replace(/\n/g, " ")
+          .replace(/;/g, " ")
+          .split(" ")
+          .filter((element) => element !== "")
+      )
+    );
+
+    return filteredTextList;
+  };
+
+  const newTitle = useRef<string>("");
+
+  const handleTitleChange = (text: string) => {
+    newTitle.current = text;
+  };
+
+  const handleSubmit = () => {
+    if (newTitle.current === null) {
+      toast.error("이름이 입력되지 않았습니다.");
+      return;
+    } else {
+      closeModal();
+    }
+  };
+
+  const closeModal = () => {
+    newTitle.current = "";
+    setIsNameChangeOpen(false);
+  };
+
+  const handleShortContent = (value: string) => {
+    setShortContent(value);
+  };
+
   return (
-    <div className="">
-      <div className="flex justify-center gap-2 mb-2">
-        <div className="ql-snow w-[768px]">
-          <div className="my-2">WRITING</div>
-          <div className="flex">
-            <span>제목 : </span>
-            <input type="text" onChange={(e) => setTitle(e.target.value)} />
+    <div className="w-full mt-10">
+      <div className="m-auto w-[1544px] mb-2">
+        <input
+          className="w-[500px] h-[50px] outline-none text-4xl"
+          type="text"
+          placeholder="제목을 입력하세요."
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <div className="flex w-full gap-2">
+          <div className="ql-snow w-[768px]">
+            <div className="my-2">WRITING</div>
+            <Editor htmlStr={htmlStr} setHtmlStr={setHtmlStr} />
           </div>
-          <div className="flex">
-            <span>소개 : </span>
-            <input
-              type="text"
-              onChange={(e) => setShortContent(e.target.value)}
+          <div className="ql-snow w-[768px] h-[693px]">
+            <div className="my-2">PREVIEW</div>
+            <div
+              className="ql-editor bg-slate-50  border border-solid border-lightGray-20"
+              dangerouslySetInnerHTML={{
+                __html: htmlStr,
+              }}
             />
           </div>
-          <Editor htmlStr={htmlStr} setHtmlStr={setHtmlStr} />
-        </div>
-        <div className="ql-snow w-[768px] h-[300px]">
-          <div className="my-2">PREVIEW</div>
-          <div
-            className="ql-editor bg-slate-100"
-            dangerouslySetInnerHTML={{
-              __html: htmlStr,
-            }}
-          />
         </div>
       </div>
       <div className="m-auto w-[1544px]">
         <div className="flex border p-4 w-full items-center">
-          <div className="">
-            <input placeholder="태그를 입력하세요."></input>
-          </div>
+          <input
+            className="w-[90%] outline-none"
+            placeholder="태그를 추가해보세요. *띄어쓰기 또는 세미콜론(;)으로 구분해서 입력해주세요."
+            onChange={(e) => onChangeHandler(e.target.value)}
+          ></input>
           <div className="ml-auto">
             <button onClick={() => submitHandler()}>등록</button>
+            {/* <button onClick={() => setIsNameChangeOpen(true)}>다음</button> */}
           </div>
         </div>
       </div>
+      {isNameChangeOpen && (
+        <ThumbnailModal
+          isNameChangeOpen={isNameChangeOpen}
+          closeModal={closeModal}
+          handleTitleChange={handleTitleChange}
+          handleSubmit={handleSubmit}
+          handleShortContent={handleShortContent}
+        />
+      )}
     </div>
   );
 }

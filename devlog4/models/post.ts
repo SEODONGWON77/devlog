@@ -8,6 +8,7 @@ const postSchema = new mongoose.Schema({
   createDt: Date,
   updateDt: Date,
   index: Number,
+  tagList: Array,
 });
 
 export default mongoose.models.Post || mongoose.model("Post", postSchema);

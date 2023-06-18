@@ -1,19 +1,26 @@
 import React from "react";
 import List from "./List";
 import "../../styles/globals.css";
+import Header from "app/components/Header";
+import Search from "./List/components/Search";
 type Props = {};
 
 const Main = async ({}: Props) => {
   return (
-    <div className="w-full">
-      <div className="w-full h-[280px] bg-slate-400">캐러셀 컴포넌트</div>
+    <div className="relative w-full">
+      <div className="absolute w-full z-20">
+        <Header />
+      </div>
+      <div className="h-[330px] relative w-full bg-[#5bbdff] flex justify-center items-center text-white">
+        개발중...
+      </div>
       <div className="w-full flex">
-        <div className="w-[10%] bg-lime-100">광고 컴포넌트</div>
-        <div className="w-[80%]"> 
-          <div className="w-full h-20 bg-red-300">카테고리컴포넌트</div>
+        <div className="w-[10%]"></div>
+        <div className="w-[80%]">
+          <Search />
           <List />
         </div>
-        <div className="w-[10%] bg-lime-100">광고 컴포넌트</div>
+        <div className="w-[10%]"></div>
       </div>
     </div>
   );

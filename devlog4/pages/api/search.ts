@@ -7,9 +7,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  dbConnect();
   if (req.method === "POST") {
-    const { name, htmlStr, title, shortContent, tagList } = req.body;
+    const { name, htmlStr, title, shortContent } = req.body;
     let { seq } = await Counter.findByIdAndUpdate("userid", {
       $inc: { seq: 1 },
     });
@@ -21,13 +20,11 @@ export default async function handler(
       createDt: new Date(),
       updateDt: new Date(),
       index: seq === null ? 0 : seq,
-      tagList: tagList,
     });
     res.status(201).json({ post });
   }
 
   if (req.method === "GET") {
-    const result = await Post.find(req.query);
-    res.status(201).json({ result });
+    console.log("123");
   }
 }

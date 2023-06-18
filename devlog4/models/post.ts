@@ -9,6 +9,7 @@ const postSchema = new mongoose.Schema({
   updateDt: Date,
   index: Number,
   tagList: Array,
+  previewImageUrl: String,
 });
 
 export default mongoose.models.Post || mongoose.model("Post", postSchema);

@@ -10,21 +10,21 @@ import "../../styles/globals.css";
 import Editor from "app/components/Editor";
 import { useRouter } from "next/navigation";
 import ThumbnailModal from "./components/thumbnail-modal/ThumbnailModal";
-import { toast } from "react-toastify";
+import { useSession } from "next-auth/react";
 
 type Props = {};
 
 function Post({}: Props) {
   const router = useRouter();
-  const userName = useRecoilValue(userNameState);
   const [title, setTitle] = useState("");
-  const [shortContent, setShortContent] = useState("");
+  const [htmlStr, setHtmlStr] = useState<string | null>(null);
   const allFetch = createAllRestFetchByDevlog("post");
-  const [htmlStr, setHtmlStr] = useState<string>("");
   const viewContainerRef = useRef<HTMLDivElement>(null);
   const tagList = useRef<string[]>([]);
-  const [isNameChangeOpen, setIsNameChangeOpen] = useState(false);
-
+  const [isThumbNailModalOpen, setIsThumbNailModalOpen] = useState(false);
+  const { data } = useSession();
+  const userName: string =
+    typeof data?.user?.name !== "string" ? "" : data?.user?.name;
   useEffect(() => {
     if (viewContainerRef.current) {
       viewContainerRef.current.innerHTML =
@@ -32,22 +32,6 @@ function Post({}: Props) {
       viewContainerRef.current.innerHTML += htmlStr;
     }
   }, [htmlStr]);
-
-  const submitHandler = async () => {
-    try {
-      await allFetch.postFetch("", {
-        userName,
-        htmlStr,
-        title,
-        shortContent,
-        tagList: tagList.current,
-      });
-      alert("저장되었습니다.");
-      router.push("/main");
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
 
   const onChangeHandler = (text: string) => {
     const modifyText = text.replace(/\s+/g, " ");
@@ -71,30 +55,40 @@ function Post({}: Props) {
     return filteredTextList;
   };
 
-  const newTitle = useRef<string>("");
-
-  const handleTitleChange = (text: string) => {
-    newTitle.current = text;
-  };
-
-  const handleSubmit = () => {
-    if (newTitle.current === null) {
-      toast.error("이름이 입력되지 않았습니다.");
-      return;
-    } else {
-      closeModal();
+  const handleSubmit = async (
+    previewImageUrl: string,
+    shortIntrodution: string
+  ) => {
+    try {
+      await allFetch.postFetch("", {
+        name: userName,
+        htmlStr,
+        title,
+        shortContent: shortIntrodution,
+        tagList: tagList.current,
+        previewImageUrl,
+      });
+      alert("저장되었습니다.");
+      handleCloseModal();
+      router.push("/main");
+    } catch (error) {
+      console.log("error", error);
     }
   };
 
-  const closeModal = () => {
-    newTitle.current = "";
-    setIsNameChangeOpen(false);
+  const handleCloseModal = () => {
+    setIsThumbNailModalOpen(false);
   };
 
-  const handleShortContent = (value: string) => {
-    setShortContent(value);
+  const handleHtmlStr = (currentHtmlStr: string) => {
+    setHtmlStr(currentHtmlStr);
   };
 
+  const onClickThumbnailModalOpen = () => {
+    if (title === null || title.length === 0)
+      return alert("타이틀이 입력되지 않았습니다.");
+    setIsThumbNailModalOpen(true);
+  };
   return (
     <div className="w-full mt-10">
       <div className="m-auto w-[1544px] mb-2">
@@ -107,14 +101,14 @@ function Post({}: Props) {
         <div className="flex w-full gap-2">
           <div className="ql-snow w-[768px]">
             <div className="my-2">WRITING</div>
-            <Editor htmlStr={htmlStr} setHtmlStr={setHtmlStr} />
+            <Editor htmlStr={htmlStr} handleHtmlStr={handleHtmlStr} />
           </div>
           <div className="ql-snow w-[768px] h-[693px]">
             <div className="my-2">PREVIEW</div>
             <div
               className="ql-editor bg-slate-50  border border-solid border-lightGray-20"
               dangerouslySetInnerHTML={{
-                __html: htmlStr,
+                __html: htmlStr === null ? "" : htmlStr,
               }}
             />
           </div>
@@ -128,20 +122,17 @@ function Post({}: Props) {
             onChange={(e) => onChangeHandler(e.target.value)}
           ></input>
           <div className="ml-auto">
-            <button onClick={() => submitHandler()}>등록</button>
-            {/* <button onClick={() => setIsNameChangeOpen(true)}>다음</button> */}
+            <button onClick={onClickThumbnailModalOpen}>다음</button>
           </div>
         </div>
       </div>
-      {isNameChangeOpen && (
-        <ThumbnailModal
-          isNameChangeOpen={isNameChangeOpen}
-          closeModal={closeModal}
-          handleTitleChange={handleTitleChange}
-          handleSubmit={handleSubmit}
-          handleShortContent={handleShortContent}
-        />
-      )}
+      <ThumbnailModal
+        isThumbNailModalOpen={isThumbNailModalOpen}
+        handleCloseModal={handleCloseModal}
+        handleSubmit={handleSubmit}
+        title={title}
+        userName={userName}
+      />
     </div>
   );
 }

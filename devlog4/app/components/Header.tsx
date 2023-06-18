@@ -18,14 +18,13 @@ const Header = () => {
   const setUserEmail = useSetRecoilState(userEmailState);
 
   useEffect(() => {
-    console.log("콘솔 userName: ", userName, ", userEmail", userEmail);
     setUserName(userName);
     setUserEmail(userEmail);
   }, [userEmail, userName]);
 
   return (
     <nav className="navbar">
-      <div className="w-full h-[60px] flex px-[12.5%] text-white">
+      <div className="fixed top-0 w-full h-[60px] flex px-[12.5%] text-white bg-[#5bbdff] z-20">
         <div className="h-full p-4 text-2xl font-bold">
           <Link href="/main">DevLog</Link>
         </div>

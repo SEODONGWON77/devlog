@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 type Props = {};
 
 function Detail({}: Props) {
-  return (<></>);
+  return <></>;
 }
 
 export default Detail;

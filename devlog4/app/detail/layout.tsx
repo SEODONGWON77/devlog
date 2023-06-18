@@ -11,10 +11,8 @@ type Props = {
 const MainLayout = ({ children }: Props) => {
   return (
     <>
-      <div className="h-[60px] w-full bg-[#5bbdff] px-[12.5%] text-white">
-        <Header />
-      </div>
-      <div className="flex h-[100vh]">
+      <Header />
+      <div className="flex h-[100vh] pt-[60px]">
         <div className="w-[10%] h-[100vh]">
           <LikeButton />
         </div>
@@ -29,6 +27,6 @@ const MainLayout = ({ children }: Props) => {
       </div>
     </>
   );
-}
+};
 
 export default MainLayout;

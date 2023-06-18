@@ -7,8 +7,8 @@ type Props = {};
 
 const Main = async ({}: Props) => {
   return (
-    <div className="relative w-full">
-      <div className="absolute w-full z-20">
+    <div className="w-full h-screen">
+      <div className="w-full z-20 fixed top-0 h-[100px]">
         <Header />
       </div>
       <div className="h-[330px] relative w-full bg-[#5bbdff] flex justify-center items-center text-white">

@@ -9,7 +9,8 @@ export default async function handler(
 ) {
   dbConnect();
   if (req.method === "POST") {
-    const { name, htmlStr, title, shortContent, tagList } = req.body;
+    const { name, htmlStr, title, shortContent, tagList, previewImageUrl } =
+      req.body;
     let { seq } = await Counter.findByIdAndUpdate("userid", {
       $inc: { seq: 1 },
     });
@@ -22,6 +23,7 @@ export default async function handler(
       updateDt: new Date(),
       index: seq === null ? 0 : seq,
       tagList: tagList,
+      previewImageUrl: previewImageUrl,
     });
     res.status(201).json({ post });
   }

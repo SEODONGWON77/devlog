@@ -2,27 +2,13 @@ import React, { useEffect, useRef } from "react";
 import BookmarkButtonView from "./BookmarkButtonView";
 
 interface BookmarkButtonProps {
-  searchWord?: string;
-  changeSearchWord?: React.ChangeEventHandler<HTMLInputElement>;
-  onKeyUp?: React.KeyboardEventHandler<HTMLInputElement>;
-  placeholder?: string;
+  count?: any;
 }
 
-const BookmarkButton: React.FC<BookmarkButtonProps> = ({ searchWord, changeSearchWord, onKeyUp, placeholder }) => {
-  const ref = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (ref.current) {
-      ref.current.focus();
-    }
-  }, [ref]);
+const BookmarkButton: React.FC<BookmarkButtonProps> = ({ count }) => {
 
   const props = {
-    searchWord,
-    changeSearchWord,
-    onKeyUp,
-    placeholder,
-    ref,
+    count,
   };
 
   return <BookmarkButtonView {...props} />;

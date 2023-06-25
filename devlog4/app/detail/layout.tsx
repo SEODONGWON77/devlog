@@ -3,6 +3,8 @@ import DetailPage from "./page";
 import LikeButton from "./components/like-button/LikeButton";
 import FloatList from "./components/float-list/FloatList";
 import Header from "../components/Header";
+import Toc from "./components/toc/Toc";
+import { Main } from "next/document";
 
 type Props = {
   children: React.ReactNode;
@@ -10,7 +12,7 @@ type Props = {
 
 const MainLayout = ({ children }: Props) => {
   return (
-    <>
+    <div className="scroll-mt-[80px]">
       <Header />
       <div className="flex h-[100vh] pt-[60px]">
         <div className="w-[15%] h-[100vh]">
@@ -25,7 +27,7 @@ const MainLayout = ({ children }: Props) => {
           <FloatList />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

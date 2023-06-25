@@ -5,15 +5,16 @@ import { useRouter } from "next/navigation";
 import "react-quill/dist/quill.core.css";
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
-import { Quill } from "react-quill";
 import Gallery from "./Gallery";
-import { BASE_URL } from "../constants";
+import { useRecoilValue } from "recoil";
+import { postState } from "app/recoil/state";
 
 const List = ({ posts }: any) => {
   const [uniqueKey, setUniqueKey] = useState("");
   const titleHeading = useRef();
   const router = useRouter();
-
+  const postState2 = useRecoilValue(postState);
+  console.log("postState2", postState2);
   const titleProps = (pk: string): any => {
     const listKey = pk;
 
@@ -62,7 +63,8 @@ const List = ({ posts }: any) => {
         }, [imsiCont]);
 
         const getIntersectionObserver = () => {
-          const observer = new IntersectionObserver((entries) => { // observer 생성
+          const observer = new IntersectionObserver((entries) => {
+            // observer 생성
             console.log(entries);
           });
           return observer;

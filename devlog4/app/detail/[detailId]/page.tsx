@@ -8,6 +8,9 @@ import { userEmailState, userNameState } from "../../recoil/state";
 import { createAllRestFetchByDevlog } from "utils/api/fetch/devlogApiRestFetch";
 import { useQuery } from "@tanstack/react-query";
 import HashtagList from "../components/hashtag-list";
+import { detailResultService } from "app/service/detail";
+import { validateGetSearchResult } from "app/service/detail/utils/validate";
+import Toc from "../components/toc/Toc";
 
 const allFetch = createAllRestFetchByDevlog("post");
 
@@ -15,46 +18,34 @@ type Props = {
   params: any;
 };
 
-type Details = {
-  title: any;
-  htmlStr: any;
-  index: any;
-  shortContent: any;
-  tagList: any[];
-  updateDt: any;
-  createDt: any;
-};
-
 const DetailId = ({ params: { detailId } }: Props) => {
   const userEmail = useRecoilValue(userEmailState);
   const userName = useRecoilValue(userNameState);
 
   const fetchPost = async () => {
-    // let res = await allFetch.getFetch("", {
-    //   index: detailId || index,
-    // });
+    // const result = await detailResultService.getSearchResult(detailId);
+    // return result;
     let res = await allFetch.getFetch(`?index=${detailId}`);
-    if (res.result && res.result.length == 0) {
-      alert("조회된 결과가 없습니다");
-    }
-
-    const resultData = res.result;
-    return resultData.length === 1
-      ? resultData[0]
-      : ((dataArray) => {
-          dataArray.filter((item: any) => {
-            if (item.index === detailId) return item;
-          });
-
-          return dataArray;
-        })(resultData[0]);
+    const result = validateGetSearchResult(res.result[0]);
+    return result;
+    // if (res.result && res.result.length == 0) {
+    //   alert("조회된 결과가 없습니다");
+    // }
+    // const resultData = res.result;
+    // return resultData.length === 1
+    //   ? resultData[0]
+    //   : ((dataArray) => {
+    //       dataArray.filter((item: any) => {
+    //         if (item.index === detailId) return item;
+    //       });
+    //       return dataArray;
+    //     })(resultData[0]);
   };
 
-  const { data, isLoading, error } = useQuery(["posts"], fetchPost, {
+  const { data, isLoading, error } = useQuery(["detail"], fetchPost, {
     retry: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    staleTime: 5000,
     cacheTime: Infinity,
   });
 
@@ -76,6 +67,7 @@ const DetailId = ({ params: { detailId } }: Props) => {
       (detailData.index
         ? detailData
         : Object.values(detailData).filter((item: any) => {
+            console.log("item", item);
             if (item.index == detailId) {
               return item;
             }
@@ -84,7 +76,8 @@ const DetailId = ({ params: { detailId } }: Props) => {
     return (
       details &&
       !loading && (
-        <>
+        <div>
+          <Toc />
           <div className="w-full">
             <div className="flex items-center py-2 h-[80px]">
               <h1 className="text-5xl font-bold">{details.title}</h1>
@@ -148,7 +141,7 @@ const DetailId = ({ params: { detailId } }: Props) => {
             />
           </div>
           <div className="w-full"></div>
-        </>
+        </div>
       )
     );
   }

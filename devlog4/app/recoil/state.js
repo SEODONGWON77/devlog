@@ -8,3 +8,8 @@ export const userNameState = atom({
     key: 'nameState',
     default: '',
 });
+
+export const postState = atom({
+    key: 'postState',
+    default: '',
+});

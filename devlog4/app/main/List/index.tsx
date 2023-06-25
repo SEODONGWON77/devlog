@@ -8,8 +8,8 @@ import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
 import { createAllRestFetchByDevlog } from "utils/api/fetch/devlogApiRestFetch";
 import List from "./components/List";
-import { useRecoilValue } from "recoil";
-import { userEmailState, userNameState } from "../../recoil/state";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { postState, userEmailState, userNameState } from "../../recoil/state";
 import { useQuery } from "@tanstack/react-query";
 const allFetch = createAllRestFetchByDevlog("post");
 
@@ -22,16 +22,22 @@ const fetchPost = async () => {
 };
 
 const Index = () => {
-  const [postList, setPostList] = useState<any>([]);
+  const [postList, setPostList] = useRecoilState(postState);
   const [hasMore, setHasMore] = useState(true);
   const userName = useRecoilValue(userNameState);
 
   const { data, isLoading, error } = useQuery(["posts"], fetchPost, {
-    retry: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    staleTime: 5000,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    staleTime: 60 * 1000,
     cacheTime: Infinity,
+    onError: (error) => {
+      console.log("error", error);
+    },
+    onSuccess: (data) => {
+      console.log("data", data);
+      setPostList(data);
+    },
   });
 
   const infiniteScrollProps: any = () => {
@@ -47,15 +53,16 @@ const Index = () => {
       endMessage: Component.endMessage(),
     };
   };
-  
+  console.log("data", data);
+  console.log("postList", postList);
   return (
     <>
-      {!isLoading && data && (
+      {!isLoading && postList && (
         <InfiniteScroll
           {...infiniteScrollProps()}
           className="flex flex-wrap content-center justify-center"
         >
-          <List posts={data} />
+          <List posts={postList} />
         </InfiniteScroll>
       )}
     </>

@@ -13,15 +13,15 @@ const MainLayout = ({ children }: Props) => {
     <>
       <Header />
       <div className="flex h-[100vh] pt-[60px]">
-        <div className="w-[10%] h-[100vh]">
+        <div className="w-[15%] h-[100vh]">
           <LikeButton />
         </div>
-        <div className="w-[80%] h-[100vh]">
+        <div className="w-[70%] h-[100vh]">
           {/* @ts-ignore */}
           <DetailPage />
           <div className="w-full h-[100vh]">{children}</div>
         </div>
-        <div className="w-[10%] h-[100vh]">
+        <div className="w-[15%] h-[100vh]">
           <FloatList />
         </div>
       </div>

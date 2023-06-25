@@ -7,6 +7,7 @@ import { userEmailState, userNameState } from "../../recoil/state";
 
 import { createAllRestFetchByDevlog } from "utils/api/fetch/devlogApiRestFetch";
 import { useQuery } from "@tanstack/react-query";
+import HashtagList from "../components/hashtag-list";
 
 const allFetch = createAllRestFetchByDevlog("post");
 
@@ -89,13 +90,19 @@ const DetailId = ({ params: { detailId } }: Props) => {
               <h1 className="text-5xl font-bold">{details.title}</h1>
             </div>
             <div className="py-2">
-              <p className="font-bold">
-                {name}/{email}
-              </p>
+              <span className="font-bold text-sky-400">{name}</span>
+              <span className="font-bold"> · </span>
+              <span>{email}</span>
             </div>
             <div className="py-2">
-              <p className="">최초생성일자: {details.createDt}</p>
-              <p className="">마지막수정일: {details.updateDt}</p>
+              <p>생성일자: {details.createDt}</p>
+              {/* <span> / </span> */}
+              <p>마지막 수정일자: {details.updateDt}</p>
+            </div>
+            <div className="py-2">
+              <div className={buttonWrap}>
+                {details.tagList.map((item: any, index: any) => <HashtagList text={item} order={index}/>)}
+              </div>
             </div>
           </div>
           <div className="flex justify-end">
@@ -131,18 +138,10 @@ const DetailId = ({ params: { detailId } }: Props) => {
               </div>
             </div>
           </div>
-          <div className="py-2">
-            <div className={buttonWrap}>
-              {
-                details.tagList
-                // details.tags.map((item: any, index: any) => <div key={index} className={buttonStyle}>#{item}</div>)
-              }
-            </div>
-          </div>
 
           <div className="w-full h-[100vh] bg-slate-400">
             <div
-              className="bg-white border-slate-100 border-b rounded-t-xl"
+              // className="bg-white border-slate-100 border-b rounded-t-xl"
               dangerouslySetInnerHTML={{
                 __html: details.htmlStr,
               }}

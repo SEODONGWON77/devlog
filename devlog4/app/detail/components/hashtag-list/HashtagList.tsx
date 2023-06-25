@@ -2,15 +2,15 @@ import React, { useEffect, useRef } from "react";
 import HashtagListView from "./HashtagListView";
 
 interface HashtagListViewProps {
-  index?: string;
-  item?: string;
+  text?: string;
+  order?: number;
 }
 
-const HashtagList: React.FC<HashtagListViewProps> = ({ index, item }) => {
+const HashtagList: React.FC<HashtagListViewProps> = ({text, order}) => {
 
   const props = {
-    index,
-    item,
+    text,
+    order,
   };
 
   return <HashtagListView {...props} />;

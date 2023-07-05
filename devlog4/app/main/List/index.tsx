@@ -77,7 +77,13 @@ const Index = () => {
           {...infiniteScrollProps()}
           className="flex flex-wrap content-center justify-center"
         >
-          <List posts={searchResult.length > 0 ? searchResult : postList} />
+          <List
+            posts={
+              searchResult !== undefined && searchResult.length > 0
+                ? searchResult
+                : postList
+            }
+          />
         </InfiniteScroll>
       )}
     </Fragment>

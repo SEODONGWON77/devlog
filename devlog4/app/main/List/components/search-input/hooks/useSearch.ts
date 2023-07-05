@@ -7,6 +7,7 @@ export function useSearch() {
   const [enteringSearchWord, setEnteringSearchWord] = useState<string>("");
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [isSearch, setIsSearch] = useState<boolean>(false);
+  const [searchResult, setSearchResult] = useState<any>();
 
   const changeSearchWord = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchOriginalWord(e.target.value);
@@ -37,7 +38,12 @@ export function useSearch() {
     });
     if (data.hits.hits.length === 0) setIsSearch(false);
     else setIsSearch(true);
-    return data.hits;
+
+    const resultList: any[] = [];
+    data.hits.hits.forEach((hit: any) => {
+      resultList.push(hit._source);
+    });
+    return setSearchResult(resultList);
   };
 
   useEffect(() => {
@@ -51,5 +57,6 @@ export function useSearch() {
     changeSearchWord,
     searchBarKeyUp,
     isSearch,
+    searchResult,
   };
 }

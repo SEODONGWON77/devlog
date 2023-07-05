@@ -13,8 +13,7 @@ const List = ({ posts }: any) => {
   const [uniqueKey, setUniqueKey] = useState("");
   const titleHeading = useRef();
   const router = useRouter();
-  const postState2 = useRecoilValue(postState);
-  console.log("postState2", postState2);
+
   const titleProps = (pk: string): any => {
     const listKey = pk;
 
@@ -30,7 +29,7 @@ const List = ({ posts }: any) => {
       onClick: moveToDetail,
     };
   };
-
+  console.log("posts", posts);
   const Posts = () => {
     // let newPk: string;
     return posts.map(

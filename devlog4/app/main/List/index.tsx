@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Quill } from "react-quill";
 import "react-quill/dist/quill.core.css";
@@ -11,6 +11,8 @@ import List from "./components/List";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { postState, userEmailState, userNameState } from "../../recoil/state";
 import { useQuery } from "@tanstack/react-query";
+import Search from "./components/Search";
+import { useSearch } from "./components/search-input/hooks/useSearch";
 const allFetch = createAllRestFetchByDevlog("post");
 
 const fetchPost = async () => {
@@ -35,7 +37,6 @@ const Index = () => {
       console.log("error", error);
     },
     onSuccess: (data) => {
-      console.log("data", data);
       setPostList(data);
     },
   });
@@ -53,19 +54,33 @@ const Index = () => {
       endMessage: Component.endMessage(),
     };
   };
-  console.log("data", data);
-  console.log("postList", postList);
+  const {
+    searchOriginalWord,
+    searchWord,
+    changeSearchWord,
+    searchBarKeyUp,
+    enteringSearchWord,
+    isSearch,
+    searchResult,
+  } = useSearch();
+
   return (
-    <>
+    <Fragment>
+      <Search
+        searchWord={searchWord}
+        searchBarKeyUp={searchBarKeyUp}
+        changeSearchWord={changeSearchWord}
+        searchResult={searchResult}
+      />
       {!isLoading && postList && (
         <InfiniteScroll
           {...infiniteScrollProps()}
           className="flex flex-wrap content-center justify-center"
         >
-          <List posts={postList} />
+          <List posts={searchResult.length > 0 ? searchResult : postList} />
         </InfiniteScroll>
       )}
-    </>
+    </Fragment>
   );
 };
 

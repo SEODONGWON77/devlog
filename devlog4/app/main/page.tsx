@@ -17,7 +17,6 @@ const Main = async ({}: Props) => {
       <div className="w-full flex">
         <div className="w-[10%]"></div>
         <div className="w-[80%]">
-          <Search />
           <List />
         </div>
         <div className="w-[10%]"></div>

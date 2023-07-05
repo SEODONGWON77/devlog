@@ -27,30 +27,17 @@ const DetailId = ({ params: { detailId } }: Props) => {
   const userName = useRecoilValue(userNameState);
 
   const fetchPost = async () => {
-    // const result = await detailResultService.getSearchResult(detailId);
-    // return result;
     let res = await allFetch.getFetch(`?index=${detailId}`);
     const result = validateGetSearchResult(res.result[0]);
     return result;
-    // if (res.result && res.result.length == 0) {
-    //   alert("조회된 결과가 없습니다");
-    // }
-    // const resultData = res.result;
-    // return resultData.length === 1
-    //   ? resultData[0]
-    //   : ((dataArray) => {
-    //       dataArray.filter((item: any) => {
-    //         if (item.index === detailId) return item;
-    //       });
-    //       return dataArray;
-    //     })(resultData[0]);
   };
 
-  const { data, isLoading, error } = useQuery(["detail"], fetchPost, {
+  const { data, isLoading, error, refetch } = useQuery(["detail"], fetchPost, {
     retry: false,
     refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    cacheTime: Infinity,
+    refetchOnReconnect: true,
+    cacheTime: 0,
+    staleTime: 0,
   });
 
   return (
@@ -112,10 +99,10 @@ const DetailId = ({ params: { detailId } }: Props) => {
           </div>
           <div className="w-full bg-slate-400">
             <div
-              // className="bg-white border-slate-100 border-b rounded-t-xl"
-              dangerouslySetInnerHTML={{
-                __html: details.htmlStr,
-              }}
+                // className="bg-white border-slate-100 border-b rounded-t-xl"
+                dangerouslySetInnerHTML={{
+                  __html: details.htmlStr,
+                }}
             />
           </div>
         </div>

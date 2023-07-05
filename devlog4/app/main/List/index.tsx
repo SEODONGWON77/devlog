@@ -31,7 +31,7 @@ const Index = () => {
   const { data, isLoading, error } = useQuery(["posts"], fetchPost, {
     refetchOnMount: true,
     refetchOnWindowFocus: true,
-    staleTime: 60 * 1000,
+    staleTime: 0,
     cacheTime: Infinity,
     onError: (error) => {
       console.log("error", error);

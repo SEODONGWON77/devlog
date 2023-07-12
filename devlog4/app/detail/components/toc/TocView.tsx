@@ -10,7 +10,7 @@ interface TocViewProps {
 
 const TocView = ({ indexList, currentIndex }: TocViewProps) => {
   return (
-    <aside className="fixed right-10 border-l-4 border-indigo-400 px-4 py-2 bg-white z-10">
+    <aside className="fixed right-0 border mr-5 p-5 bg-white z-10 top-[45%] w-[250px] h-auto">
       <ul>
         {indexList.map(({ index, size }) => (
           <li

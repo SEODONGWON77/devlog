@@ -12,18 +12,14 @@ type Props = {
 
 const MainLayout = ({ children }: Props) => {
   return (
-    <div className="scroll-mt-[80px]">
+    <div>
       <Header />
-      <div className="flex h-[100vh] pt-[60px]">
-        <div className="w-[15%] h-[100vh]">
-          {/* <FloatList /> */}
+      <div className="flex h-full">
+        <div className="w-[15%] h-full shrink-0">{/* <FloatList /> */}</div>
+        <div className="w-[70%] h-full shrink-0">
+          <div className="w-full h-full relative top-[100px]">{children}</div>
         </div>
-        <div className="w-[70%] h-[100vh]">
-          {/* @ts-ignore */}
-          <DetailPage />
-          <div className="w-full h-[100vh]">{children}</div>
-        </div>
-        <div className="w-[15%] h-[100vh] pl-[60px]">
+        <div className="w-[15%] h-full shrink-0">
           <FloatList />
           <LikeButton />
         </div>

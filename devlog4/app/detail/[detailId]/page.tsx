@@ -85,13 +85,15 @@ const DetailId = ({ params: { detailId } }: Props) => {
             </div>
             <div className="py-2">
               <div className={buttonWrap}>
-                {details.tagList.map((item: any, index: any) => <HashtagList text={item} order={index}/>)}
+                {details.tagList.map((item: any, index: any) => (
+                  <HashtagList text={item} order={index} />
+                ))}
               </div>
             </div>
           </div>
           <div className="flex justify-end">
-            <div className="inline-flex py-2">              
-              <BookmarkButton count={0}/>
+            <div className="inline-flex py-2">
+              <BookmarkButton count={0} />
             </div>
           </div>
           <div className="w-full">
@@ -99,10 +101,10 @@ const DetailId = ({ params: { detailId } }: Props) => {
           </div>
           <div className="w-full bg-slate-400">
             <div
-                // className="bg-white border-slate-100 border-b rounded-t-xl"
-                dangerouslySetInnerHTML={{
-                  __html: details.htmlStr,
-                }}
+              // className="bg-white border-slate-100 border-b rounded-t-xl"
+              dangerouslySetInnerHTML={{
+                __html: details.htmlStr,
+              }}
             />
           </div>
         </div>

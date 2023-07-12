@@ -87,6 +87,10 @@ object {
   h2 {
     @apply text-xl;
   }
+  h1 {
+    @apply text-2xl;
+    scroll-margin-top: 120px;
+  }
 }
 html {
   scroll-behavior: smooth;

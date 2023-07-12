@@ -5,8 +5,15 @@ import "react-quill/dist/quill.core.css"
 import "react-quill/dist/quill.snow.css"
 import "react-quill/dist/quill.bubble.css"
 import { Quill } from "react-quill";
+import { validateGetMainResult } from "app/service/main/utils/validate";
+import { MainResult } from "app/service/main/utils/schema";
+
 interface TempPostListProps {
   id: string;
+}
+
+interface ListProps {
+  data: MainResult;
 }
 
 const TempPostList = ({ id }: TempPostListProps) => {
@@ -15,11 +22,13 @@ const TempPostList = ({ id }: TempPostListProps) => {
   useEffect(() => {
     const fetchPost = async () => {
       let res = await allFetch.getFetch("/");
-      if (res.result && res.result.length == 0) {
-        alert("조회된 결과가 없습니다");
-      } else {
-        setPostList(res.result);
-      }
+      const result = validateGetMainResult(res.result[0]);
+
+      // if (res.result && res.result.length == 0) {
+      //   alert("조회된 결과가 없습니다");
+      // } else {
+      setPostList(result);
+      // }
     };
 
     fetchPost();

@@ -13,14 +13,25 @@ import { postState, userEmailState, userNameState } from "../../recoil/state";
 import { useQuery } from "@tanstack/react-query";
 import Search from "./components/Search";
 import { useSearch } from "./components/search-input/hooks/useSearch";
+import { mainResultService } from "app/service/main";
+import { validateGetMainResult } from "app/service/main/utils/validate";
+import { MainResponse } from "app/service/main/utils/schema";
+
 const allFetch = createAllRestFetchByDevlog("post");
 
+interface ListProps {
+  data: MainResponse
+}
+
 const fetchPost = async () => {
-  let res = await allFetch.getFetch("/");
-  if (res.result && res.result.length == 0) {
-    alert("조회된 결과가 없습니다");
-  }
-  return res.result;
+  // let res = await allFetch.getFetch("/");
+  // if (res.result && res.result.length == 0) {
+  //   alert("조회된 결과가 없습니다");
+  // }
+  const result = mainResultService.getMainResult();
+
+  console.log('콘솔 List result', result);
+  return result;
 };
 
 const Index = () => {
@@ -36,9 +47,9 @@ const Index = () => {
     onError: (error) => {
       console.log("error", error);
     },
-    onSuccess: (data) => {
-      setPostList(data);
-    },
+    // onSuccess: (data) => {
+    //   setPostList(data);
+    // },
   });
 
   const infiniteScrollProps: any = () => {

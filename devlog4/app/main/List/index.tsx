@@ -1,36 +1,26 @@
 "use client";
 
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, Fragment } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Quill } from "react-quill";
 import "react-quill/dist/quill.core.css";
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
-import { createAllRestFetchByDevlog } from "utils/api/fetch/devlogApiRestFetch";
 import List from "./components/List";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { postState, userEmailState, userNameState } from "../../recoil/state";
+import { postState, userNameState } from "../../recoil/state";
 import { useQuery } from "@tanstack/react-query";
 import Search from "./components/Search";
 import { useSearch } from "./components/search-input/hooks/useSearch";
-import { mainResultService } from "app/service/main";
-import { validateGetMainResult } from "app/service/main/utils/validate";
+import { mainService } from "app/service/main";
 import { MainResponse } from "app/service/main/utils/schema";
 
-const allFetch = createAllRestFetchByDevlog("post");
-
 interface ListProps {
-  data: MainResponse
+  data: MainResponse;
 }
 
 const fetchPost = async () => {
-  // let res = await allFetch.getFetch("/");
-  // if (res.result && res.result.length == 0) {
-  //   alert("조회된 결과가 없습니다");
-  // }
-  const result = mainResultService.getMainResult();
-
-  console.log('콘솔 List result', result);
+  const result = mainService.getMainResult();
   return result;
 };
 
@@ -39,17 +29,18 @@ const Index = () => {
   const [hasMore, setHasMore] = useState(true);
   const userName = useRecoilValue(userNameState);
 
-  const { data, isLoading, error } = useQuery(["posts"], fetchPost, {
+  const { data, isLoading } = useQuery(["posts"], fetchPost, {
     refetchOnMount: true,
     refetchOnWindowFocus: true,
     staleTime: 0,
     cacheTime: Infinity,
+    retry: false,
     onError: (error) => {
       console.log("error", error);
     },
-    // onSuccess: (data) => {
-    //   setPostList(data);
-    // },
+    onSuccess: () => {
+      if (data !== undefined) setPostList(String(data));
+    },
   });
 
   const infiniteScrollProps: any = () => {

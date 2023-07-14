@@ -1,5 +1,5 @@
 import service from "./MainService";
 
-export const MainResultService = service;
+export const MainService = service;
 
-export const mainResultService = new MainResultService();
+export const mainService = new MainService();

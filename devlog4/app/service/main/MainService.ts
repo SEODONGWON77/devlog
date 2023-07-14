@@ -7,8 +7,7 @@ const allFetch = createAllRestFetchByDevlog("post");
 
 export default class MainResultService {
   public async getMainResult() {
-
-    const { result } = await allFetch.getFetch("/");
-    return validateGetMainResult(result);
+    const data = await allFetch.getFetch("/");
+    return validateGetMainResult(data);
   }
 }

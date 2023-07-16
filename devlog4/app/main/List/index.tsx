@@ -25,6 +25,7 @@ const fetchPost = async () => {
   const tempResult = await mainService.getTempResult();
   const tempResult2 = await mainService.getTempResult2();
   console.log("tempResult", tempResult);
+  console.log("tempResult2", tempResult2);
   const result = mainService.getMainResult();
 
   return result;

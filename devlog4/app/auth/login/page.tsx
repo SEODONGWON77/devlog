@@ -2,9 +2,10 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { signIn, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { mainService } from "app/service/main";
+import { MainResponse } from "app/service/main/utils/schema";
 // import { Url } from "url";
 
 interface IForm {
@@ -32,12 +33,20 @@ const Login = () => {
 
     const {password, email} = data;
     
+    /*
     const response = await signIn("credentials", {
       redirect: false,
       email,
       password,
       callbackUrl: "/main",
     });
+    if (response?.error) {
+      console.log("error", response?.error);
+    } else {
+      router.push(response?.url as string);
+    }
+    */
+    const response = await mainService.getSignInResult({email, password});
     if (response?.error) {
       console.log("error", response?.error);
     } else {

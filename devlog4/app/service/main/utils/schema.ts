@@ -8,6 +8,7 @@ import {
   Nested,
   NestedArray,
   Custom,
+  Boolean,
 } from "fastest-validator-decorators";
 import { makeCustomChecker } from "../../../../utils/validate/makeCustomChecker";
 
@@ -19,6 +20,23 @@ export class MainResponse {
 
   @NestedArray({ validator: DetailResult })
   result!: DetailResult[];
+}
+
+@Schema()
+export class SignIngResponse {
+  constructor(obj: unknown) {
+    Object.assign(this, obj);
+  }
+
+  @String({ nullable: true })
+  error!: string | null;
+  @Boolean()
+  ok!: boolean;
+  @Number()
+  status!: number;
+  @String()
+  url!: string; 
+
 }
 
 //-------------------------------------------------temp-------------------------------------------------------

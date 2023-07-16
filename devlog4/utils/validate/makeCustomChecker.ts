@@ -6,7 +6,7 @@ export interface MakeCustomCheckerProps {
   value: unknown;
 }
 
-export const makeCustomSyncChecker = ({ key, schema, value }: MakeCustomCheckerProps) => {
+export const makeCustomChecker = ({ key, schema, value }: MakeCustomCheckerProps) => {
   const v = new Validator();
   const check = v.compile(schema) as SyncCheckFunction;
 

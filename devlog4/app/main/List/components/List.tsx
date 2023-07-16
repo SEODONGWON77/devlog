@@ -29,7 +29,6 @@ const List = ({ posts }: any) => {
       onClick: moveToDetail,
     };
   };
-  console.log("posts", posts);
   const Posts = () => {
     // let newPk: string;
     return posts.map(

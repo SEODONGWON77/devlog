@@ -10,7 +10,7 @@ import {
   Custom,
   getSchema,
 } from "fastest-validator-decorators";
-import { makeCustomSyncChecker } from "../../../../utils/validate/makeCustomChecker";
+import { makeCustomChecker } from "../../../../utils/validate/makeCustomChecker";
 @Schema()
 export class DetailResult {
   constructor(obj: unknown) {

@@ -1,8 +1,27 @@
 import { wrappedValidate } from "utils/validate/wrappedValidate";
-import { MainResponse } from "./schema";
+import {
+  GetClaimListResponse,
+  GetPatentNumberResponse,
+  MainResponse,
+} from "./schema";
 
 export const validateGetMainResult = async (getMainResponse: unknown) => {
   const result = new MainResponse(getMainResponse);
+  await wrappedValidate(result);
+
+  return result.result;
+};
+
+export const validateGetTempResult = async (response: unknown) => {
+  const result = new GetPatentNumberResponse({
+    patentNumberMap: response,
+  });
+  await wrappedValidate(result);
+  return result;
+};
+
+export const validateGetTempResult2 = async (response: unknown) => {
+  const result = new GetClaimListResponse(response);
   await wrappedValidate(result);
 
   return result;

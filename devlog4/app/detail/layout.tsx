@@ -1,6 +1,6 @@
 import React from "react";
 import DetailPage from "./page";
-import LikeButton from "./components/like-button/LikeButton";
+import TopButton from "./components/top-button/TopButton";
 import FloatList from "./components/float-list/FloatList";
 import Header from "../components/Header";
 import Toc from "./components/toc/Toc";
@@ -21,7 +21,7 @@ const MainLayout = ({ children }: Props) => {
         </div>
         <div className="w-[15%] h-full shrink-0">
           <FloatList />
-          <LikeButton />
+          <TopButton />
         </div>
       </div>
     </div>

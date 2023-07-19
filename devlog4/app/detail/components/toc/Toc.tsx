@@ -2,7 +2,11 @@
 import React, { useEffect, useState } from "react";
 import TocView from "./TocView";
 
-const Toc = () => {
+interface TocProps {
+  handleIsTocClick: () => void;
+}
+
+const Toc = ({ handleIsTocClick }: TocProps) => {
   // 목차 리스트 ( index: 목차, size: 목차의 크기 ( h1~h6는 크기를 다르게 렌더링해주기 위함 ) )
   const [indexList, setIndexList] = useState<{ index: string; size: number }[]>(
     []
@@ -57,7 +61,13 @@ const Toc = () => {
     return () => IOList.forEach((IO) => IO.disconnect());
   }, []);
 
-  return <TocView indexList={indexList} currentIndex={currentIndex} />;
+  return (
+    <TocView
+      indexList={indexList}
+      currentIndex={currentIndex}
+      handleIsTocClick={handleIsTocClick}
+    />
+  );
 };
 
 export default Toc;

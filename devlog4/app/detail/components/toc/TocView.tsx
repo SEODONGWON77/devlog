@@ -6,9 +6,14 @@ interface TocViewProps {
     size: number;
   }[];
   currentIndex: string;
+  handleIsTocClick: () => void;
 }
 
-const TocView = ({ indexList, currentIndex }: TocViewProps) => {
+const TocView = ({
+  indexList,
+  currentIndex,
+  handleIsTocClick,
+}: TocViewProps) => {
   return (
     <aside className="fixed right-0 border mr-5 p-5 bg-white z-10 top-[45%] w-[250px] h-auto">
       <ul>
@@ -24,7 +29,9 @@ const TocView = ({ indexList, currentIndex }: TocViewProps) => {
                   ${currentIndex === index ? "text-indigo-400 scale-105" : ""}
                 `}
           >
-            <a href={`#${index}`}>{index}</a>
+            <a href={`#${index}`} onClick={handleIsTocClick}>
+              {index}
+            </a>
           </li>
         ))}
       </ul>

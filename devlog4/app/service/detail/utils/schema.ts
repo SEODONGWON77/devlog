@@ -36,4 +36,8 @@ export class DetailResult {
   __v!: number;
   @String()
   _id!: string;
+  @Number({ nullable: true })
+  likedCounter!: number;
+  // @Number({ nullable: true })
+  // watchedCounter!: number;
 }

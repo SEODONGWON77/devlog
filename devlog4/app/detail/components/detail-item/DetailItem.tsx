@@ -3,6 +3,7 @@ import { DetailResult } from "app/service/detail/utils/schema";
 import { useRouter } from "next/navigation";
 import HashtagList from "../hashtag-list";
 import BookmarkButton from "../bookmark-button";
+import LikeButton from "../like-button";
 import Toc from "../toc/Toc";
 
 interface DetailItemProps {
@@ -74,10 +75,17 @@ const DetailItem = (detailData: DetailItemProps) => {
           </div>
         </div>
         <div className="flex justify-end">
-          <div className="inline-flex py-2">
-            <BookmarkButton count={0} />
+            <div className="inline-flex items-center p-2 ">
+              <div className="m-2">
+                <BookmarkButton count={0} />
+              </div>
+              <div>
+                <LikeButton
+                  count={details.likedCounter}
+                />
+              </div>
+            </div>
           </div>
-        </div>
         <div className="w-full">
           <img src={details.previewImageUrl}></img>
         </div>

@@ -24,6 +24,7 @@ export default async function handler(
       index: seq === null ? 0 : seq,
       tagList: tagList,
       previewImageUrl: previewImageUrl,
+      likedCounter: 0,
     });
     res.status(201).json({ post });
   }

@@ -86,7 +86,7 @@ const ThumbnailModal = ({
             썸네일 프리뷰
             <div className="cursor-pointer m-7 w-64 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 h-[88px]">
               <Gallery
-                url={previewImageUrl !== null ? Url : image}
+                url={previewImageUrl !== null ? previewImageUrl : image}
                 alt={`product-${index}`}
               />
               <div className="p-5">

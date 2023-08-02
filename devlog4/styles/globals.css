@@ -95,3 +95,14 @@ object {
 html {
   scroll-behavior: smooth;
 }
+
+blockquote {
+  border-left: 4px solid #ccc;
+  padding-left: 16px;
+  padding: 10px 0 10px 0;
+  background: #ededed;
+}
+
+pre {
+  background: #ededed;
+}

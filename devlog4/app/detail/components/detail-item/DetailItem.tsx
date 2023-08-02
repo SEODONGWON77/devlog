@@ -5,7 +5,8 @@ import HashtagList from "../hashtag-list";
 import BookmarkButton from "../bookmark-button";
 import LikeButton from "../like-button";
 import Toc from "../toc/Toc";
-
+import hljs from "highlightjs";
+import "highlightjs/styles/vs2015.css";
 interface DetailItemProps {
   loading: boolean;
   data?: DetailResult;
@@ -13,6 +14,10 @@ interface DetailItemProps {
   email: string;
   name: string;
 }
+
+hljs.configure({
+  languages: ["javascript", "ruby", "python", "rust"],
+});
 
 const DetailItem = (detailData: DetailItemProps) => {
   const { email, name, loading, detailIndex, data } = detailData;
@@ -46,7 +51,7 @@ const DetailItem = (detailData: DetailItemProps) => {
       window.removeEventListener("popstate", handlePopstate);
     };
   }, [handleIsTocClick]);
-
+  console.log("details.htmlStr", details.htmlStr);
   return (
     details &&
     !loading && (
@@ -75,21 +80,19 @@ const DetailItem = (detailData: DetailItemProps) => {
           </div>
         </div>
         <div className="flex justify-end">
-            <div className="inline-flex items-center p-2 ">
-              <div className="m-2">
-                <BookmarkButton count={0} />
-              </div>
-              <div>
-                <LikeButton
-                  count={details.likedCounter}
-                />
-              </div>
+          <div className="inline-flex items-center p-2 ">
+            <div className="m-2">
+              <BookmarkButton count={0} />
+            </div>
+            <div>
+              <LikeButton count={details.likedCounter} />
             </div>
           </div>
+        </div>
         <div className="w-full">
           <img src={details.previewImageUrl}></img>
         </div>
-        <div className="w-full bg-slate-400">
+        <div className="w-full">
           <div
             // className="bg-white border-slate-100 border-b rounded-t-xl"
             dangerouslySetInnerHTML={{

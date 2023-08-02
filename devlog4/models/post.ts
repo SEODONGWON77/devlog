@@ -10,6 +10,7 @@ const postSchema = new mongoose.Schema({
   index: Number,
   tagList: Array,
   previewImageUrl: String,
+  likedCounter: Number,
 });
 
 export default mongoose.models.Post || mongoose.model("Post", postSchema);

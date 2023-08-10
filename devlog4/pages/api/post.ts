@@ -9,20 +9,13 @@ export default async function handler(
 ) {
   dbConnect();
   if (req.method === "POST") {
-    const { name, htmlStr, title, shortContent, tagList, previewImageUrl, likedCounter } =
-      req.body;
+    const { name, htmlStr, title, shortContent, tagList, previewImageUrl, likedCounter, _id } = req.body;
 
-    if (likedCounter) {
-      const queryString = req.query || [];
-
-      if (queryString.indexOf('&') > -1) {
-        const [_id, liedCounter] = queryString.split('&');
-
-        const counter = await Post.update(req.query);
-  
-        res.status(201).json({ counter });
-      }
-
+    if (_id && likedCounter) {
+      const counter = await Post.updateOne({_id}, {
+        $inc : {likedCounter : 1},
+      });
+      res.status(201).json({ counter });
     }
     else {
       let { seq } = await Counter.findByIdAndUpdate("userid", {

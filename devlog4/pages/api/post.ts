@@ -9,24 +9,39 @@ export default async function handler(
 ) {
   dbConnect();
   if (req.method === "POST") {
-    const { name, htmlStr, title, shortContent, tagList, previewImageUrl } =
+    const { name, htmlStr, title, shortContent, tagList, previewImageUrl, likedCounter } =
       req.body;
-    let { seq } = await Counter.findByIdAndUpdate("userid", {
-      $inc: { seq: 1 },
-    });
-    const post = await Post.create({
-      name: name,
-      htmlStr: htmlStr,
-      title: title,
-      shortContent: shortContent,
-      createDt: new Date(),
-      updateDt: new Date(),
-      index: seq === null ? 0 : seq,
-      tagList: tagList,
-      previewImageUrl: previewImageUrl,
-      likedCounter: 0,
-    });
-    res.status(201).json({ post });
+
+    if (likedCounter) {
+      const queryString = req.query || [];
+
+      if (queryString.indexOf('&') > -1) {
+        const [_id, liedCounter] = queryString.split('&');
+
+        const counter = await Post.update(req.query);
+  
+        res.status(201).json({ counter });
+      }
+
+    }
+    else {
+      let { seq } = await Counter.findByIdAndUpdate("userid", {
+        $inc: { seq: 1 },
+      });
+      const post = await Post.create({
+        name: name,
+        htmlStr: htmlStr,
+        title: title,
+        shortContent: shortContent,
+        createDt: new Date(),
+        updateDt: new Date(),
+        index: seq === null ? 0 : seq,
+        tagList: tagList,
+        previewImageUrl: previewImageUrl,
+        likedCounter: 0,
+      });
+      res.status(201).json({ post });
+    }
   }
 
   if (req.method === "GET") {

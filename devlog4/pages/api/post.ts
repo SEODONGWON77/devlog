@@ -11,7 +11,7 @@ export default async function handler(
   if (req.method === "POST") {
     const { name, htmlStr, title, shortContent, tagList, previewImageUrl, likedCounter, _id } = req.body;
 
-    if (_id && likedCounter) {
+    if ((likedCounter !== undefined) && _id) {
       const counter = await Post.updateOne({_id}, {
         $inc : {likedCounter : 1},
       });

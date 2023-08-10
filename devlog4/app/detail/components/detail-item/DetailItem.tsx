@@ -28,7 +28,6 @@ const DetailItem = (detailData: DetailItemProps) => {
     (data?.index
       ? data
       : Object.values(detailData).filter((item: any) => {
-          console.log("item", item);
           if (item.index == detailIndex) {
             return item;
           }
@@ -51,7 +50,7 @@ const DetailItem = (detailData: DetailItemProps) => {
       window.removeEventListener("popstate", handlePopstate);
     };
   }, [handleIsTocClick]);
-  console.log("details.htmlStr", details.htmlStr);
+  
   return (
     details &&
     !loading && (

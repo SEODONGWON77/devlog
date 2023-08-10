@@ -85,7 +85,7 @@ const DetailItem = (detailData: DetailItemProps) => {
               <BookmarkButton count={0} />
             </div>
             <div>
-              <LikeButton count={details.likedCounter} />
+              <LikeButton count={details.likedCounter} _id={details._id}/>
             </div>
           </div>
         </div>

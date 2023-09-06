@@ -27,7 +27,7 @@ const Login = () => {
       email: "",
     },
   });
-  console.log("ci/cd test")
+  console.log("ci/cd test2")
   const router = useRouter();
 
   const submitHandler = async (data: IForm) => {

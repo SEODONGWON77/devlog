@@ -27,13 +27,11 @@ const Login = () => {
       email: "",
     },
   });
-  console.log("ci/cd test2")
   const router = useRouter();
 
   const submitHandler = async (data: IForm) => {
+    const { password, email } = data;
 
-    const {password, email} = data;
-    
     /*
     const response = await signIn("credentials", {
       redirect: false,
@@ -47,7 +45,7 @@ const Login = () => {
       router.push(response?.url as string);
     }
     */
-    const response = await mainService.getSignInResult({email, password});
+    const response = await mainService.getSignInResult({ email, password });
     if (response?.error) {
       console.log("error", response?.error);
     } else {
@@ -71,11 +69,12 @@ const Login = () => {
               <input
                 type="text"
                 id="email_field"
-                className="form-control"  
+                className="form-control"
                 {...register("email", {
                   required: "이메일은 필수 입력입니다.",
                   pattern: {
-                    value: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
+                    value:
+                      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
                     message: "이메일 형식에 맞지 않습니다.",
                   },
                 })}
@@ -94,8 +93,8 @@ const Login = () => {
                   required: true,
                   minLength: {
                     value: 2,
-                    message: "2자리 이상 비밀번호를 사용하세요."
-                  }
+                    message: "2자리 이상 비밀번호를 사용하세요.",
+                  },
                 })}
               />
               {errors.password && <p>2자리 이상 비밀번호를 사용하세요.</p>}

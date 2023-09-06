@@ -19,3 +19,7 @@ jobs:
           timeout: 40s # 30초 기본
           script: |
             echo "테스트 출력"
+            cd /home/test/test
+            git checkout — *
+            git checkout master
+            git pull origin master

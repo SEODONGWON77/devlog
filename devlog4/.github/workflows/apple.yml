@@ -18,4 +18,4 @@ jobs:
           port: ${{ secrets.PORT }}
           timeout: 40s
           script: |
-            echo "테스트 출력"
+            echo "테스트 출력22"

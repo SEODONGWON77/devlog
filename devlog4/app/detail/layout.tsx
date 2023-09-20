@@ -1,10 +1,7 @@
 import React from "react";
-import DetailPage from "./page";
 import TopButton from "./components/top-button/TopButton";
 import FloatList from "./components/float-list/FloatList";
 import Header from "../components/Header";
-import Toc from "./components/toc/Toc";
-import { Main } from "next/document";
 
 type Props = {
   children: React.ReactNode;

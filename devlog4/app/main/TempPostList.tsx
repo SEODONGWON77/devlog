@@ -1,19 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { createAllRestFetchByDevlog } from "utils/api/fetch/devlogApiRestFetch";
-import "react-quill/dist/quill.core.css"
-import "react-quill/dist/quill.snow.css"
-import "react-quill/dist/quill.bubble.css"
+import "react-quill/dist/quill.core.css";
+import "react-quill/dist/quill.snow.css";
+import "react-quill/dist/quill.bubble.css";
 import { Quill } from "react-quill";
 import { validateGetMainResult } from "app/service/main/utils/validate";
-import { MainResult } from "app/service/main/utils/schema";
 
 interface TempPostListProps {
   id: string;
-}
-
-interface ListProps {
-  data: MainResult;
 }
 
 const TempPostList = ({ id }: TempPostListProps) => {
@@ -35,16 +30,16 @@ const TempPostList = ({ id }: TempPostListProps) => {
   }, []);
   console.log("postList", postList);
 
-  var quill = new Quill('#editor', {
+  var quill = new Quill("#editor", {
     modules: {
-      toolbar: false    // Snow includes toolbar by default
+      toolbar: false, // Snow includes toolbar by default
     },
-    theme: 'snow'
+    theme: "snow",
   });
 
   return (
     <div>
-      {postList.map((post:any, index:number)=>{
+      {postList.map((post: any, index: number) => {
         return (
           <div key={`${post}${index}`} className="ql-snow">
             <div>{post.name}</div>
@@ -52,9 +47,10 @@ const TempPostList = ({ id }: TempPostListProps) => {
               className="ql-editor"
               dangerouslySetInnerHTML={{
                 __html: post.htmlStr,
-               }}></div>
+              }}
+            ></div>
           </div>
-        )
+        );
       })}
     </div>
   );

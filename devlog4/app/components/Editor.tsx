@@ -7,7 +7,6 @@ import { RangeStatic } from "quill";
 import dayjs from "dayjs";
 import hljs from "highlightjs";
 import "highlightjs/styles/vs2015.css";
-import { devNull } from "os";
 import { uploadFile } from "./utils";
 interface IEditor {
   htmlStr: string | null;

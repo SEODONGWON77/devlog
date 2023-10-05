@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import hljs from "highlightjs";
 import "highlightjs/styles/vs2015.css";
 import { uploadFile } from "./utils";
+
 interface IEditor {
   htmlStr: string | null;
   handleHtmlStr: (currentHtmlStr: string) => void;
@@ -125,7 +126,8 @@ const Editor: NextPage<IEditor> = ({ htmlStr, handleHtmlStr }) => {
     "color",
     "background",
   ];
-
+  const ReactQuill =
+    typeof window === "object" ? require("react-quill") : () => false;
   return (
     <ReactQuill
       ref={quillRef}
@@ -134,9 +136,12 @@ const Editor: NextPage<IEditor> = ({ htmlStr, handleHtmlStr }) => {
       formats={formats}
       value={htmlStr === null ? "" : htmlStr}
       placeholder="내용을 입력하세요."
-      onChange={(content, delta, source, editor) =>
-        handleHtmlStr(editor.getHTML())
-      }
+      onChange={(
+        content: any,
+        delta: any,
+        source: any,
+        editor: { getHTML: () => string }
+      ) => handleHtmlStr(editor.getHTML())}
     />
   );
 };

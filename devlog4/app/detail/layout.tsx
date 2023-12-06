@@ -29,6 +29,6 @@ const MainLayout = ({ children }: Props) => {
       </div>
     </>
   );
-}
+};
 
 export default MainLayout;

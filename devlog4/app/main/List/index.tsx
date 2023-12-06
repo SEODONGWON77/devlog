@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, Fragment } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Quill } from "react-quill";
 import "react-quill/dist/quill.core.css";
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
-import { createAllRestFetchByDevlog } from "utils/api/fetch/devlogApiRestFetch";
 import List from "./components/List";
 import { useRecoilValue } from "recoil";
 import { userEmailState, userNameState } from "../../recoil/state";
@@ -22,7 +21,7 @@ const fetchPost = async () => {
 };
 
 const Index = () => {
-  const [postList, setPostList] = useState<any>([]);
+  // const [postList, setPostList] = useRecoilState<any[]>(postState);
   const [hasMore, setHasMore] = useState(true);
   const userName = useRecoilValue(userNameState);
 
@@ -34,13 +33,26 @@ const Index = () => {
     cacheTime: Infinity,
   });
 
+  const { data: detailList, isLoading } = useQuery(["posts"], fetchPost, {
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    staleTime: 0,
+    cacheTime: Infinity,
+    retry: false,
+    onError: (error) => {
+      console.log("error", error);
+    },
+    // onSuccess: () => {
+    //   console.log("detailList", detailList);
+    // },
+  });
   const infiniteScrollProps: any = () => {
     const Component = {
       loading: () => <h3> Loading...</h3>,
       endMessage: () => <h4>Nothing more to show</h4>,
     };
     return {
-      dataLength: postList.length,
+      dataLength: detailList?.length,
       next: fetchPost,
       hasMore: hasMore,
       loader: Component.loading(),
@@ -58,7 +70,7 @@ const Index = () => {
           <List posts={data} />
         </InfiniteScroll>
       )}
-    </>
+    </Fragment>
   );
 };
 

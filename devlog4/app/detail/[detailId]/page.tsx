@@ -28,6 +28,11 @@ const DetailId = ({params: {detailId}}: Props) => {
 
   const userEmail = useRecoilValue(userEmailState);
   const userName = useRecoilValue(userNameState);
+  const fetchPost = async () => {
+    let res = await allFetch.getFetch(`?index=${detailId}`);
+    const result = validateGetSearchResult(res.result[0]);
+    return result;
+  };
 
   const fetchPost = async () => {
     console.log('콘솔.. detailId', detailId, '||');

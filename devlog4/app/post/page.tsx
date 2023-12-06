@@ -18,9 +18,8 @@ function Post({}: Props) {
   const router = useRouter();
   const userName = useRecoilValue(userNameState);
   const [title, setTitle] = useState("");
-  const [shortContent, setShortContent] = useState("");
+  const [htmlStr, setHtmlStr] = useState<string | null>(null);
   const allFetch = createAllRestFetchByDevlog("post");
-  const [htmlStr, setHtmlStr] = useState<string>("");
   const viewContainerRef = useRef<HTMLDivElement>(null);
   const tagList = useRef<string[]>([]);
   const [isNameChangeOpen, setIsNameChangeOpen] = useState(false);
@@ -33,7 +32,32 @@ function Post({}: Props) {
     }
   }, [htmlStr]);
 
-  const submitHandler = async () => {
+  const onChangeHandler = (text: string) => {
+    const modifyText = text.replace(/\s+/g, " ");
+    tagList.current = getSplitTagList(modifyText);
+  };
+
+  const getSplitTagList = (text: string) => {
+    if (text.trim() === "") {
+      return [];
+    }
+    const filteredTextList = Array.from(
+      new Set(
+        text
+          .replace(/\n/g, " ")
+          .replace(/;/g, " ")
+          .split(" ")
+          .filter((element) => element !== "")
+      )
+    );
+
+    return filteredTextList;
+  };
+
+  const handleSubmit = async (
+    previewImageUrl: string,
+    shortIntrodution: string
+  ) => {
     try {
       await allFetch.postFetch("", {
         userName,
@@ -43,6 +67,7 @@ function Post({}: Props) {
         tagList: tagList.current,
       });
       alert("저장되었습니다.");
+      handleCloseModal();
       router.push("/main");
     } catch (error) {
       console.log("error", error);

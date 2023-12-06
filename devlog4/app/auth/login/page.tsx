@@ -43,6 +43,13 @@ const Login = () => {
     } else {
       router.push(response?.url as string);
     }
+    
+    const response = await mainService.getSignInResult({ email, password });
+    if (response?.error) {
+      console.log("error", response?.error);
+    } else {
+      router.push(response?.url as string);
+    }
   };
 
   return (

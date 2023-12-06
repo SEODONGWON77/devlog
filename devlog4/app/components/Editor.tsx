@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { NextPage } from "next";
 import AWS from "aws-sdk";
 import ReactQuill from "react-quill";
@@ -7,9 +7,11 @@ import { RangeStatic } from "quill";
 import dayjs from "dayjs";
 import hljs from "highlightjs";
 import "highlightjs/styles/vs2015.css";
+import { uploadFile } from "./utils";
+
 interface IEditor {
-  htmlStr: string;
-  setHtmlStr: React.Dispatch<React.SetStateAction<string>>;
+  htmlStr: string | null;
+  handleHtmlStr: (currentHtmlStr: string) => void;
 }
 
 hljs.configure({
@@ -31,7 +33,7 @@ const myBucket = new AWS.S3({
   region: REGION,
 });
 
-const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr }) => {
+const Editor: NextPage<IEditor> = ({ htmlStr, handleHtmlStr }) => {
   const quillRef = React.useRef<ReactQuill>(null);
 
   const imageHandler = () => {
@@ -70,21 +72,6 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr }) => {
         }
       }
     };
-  };
-
-  const uploadFile = async (file: File, fileName: string) => {
-    const params = {
-      ACL: "public-read",
-      Body: file,
-      Bucket: S3_BUCKET,
-      Key: "upload/" + `${fileName}`,
-    };
-    return await myBucket
-      .upload(params)
-      .promise()
-      .then((res) => {
-        return res;
-      });
   };
 
   // useMemo를 사용하지 않고 handler를 등록할 경우 타이핑 할때마다 focus가 벗어남
@@ -139,18 +126,22 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr }) => {
     "color",
     "background",
   ];
-
+  const ReactQuill =
+    typeof window === "object" ? require("react-quill") : () => false;
   return (
     <ReactQuill
       ref={quillRef}
       theme="snow"
       modules={modules}
       formats={formats}
-      value={htmlStr}
+      value={htmlStr === null ? "" : htmlStr}
       placeholder="내용을 입력하세요."
-      onChange={(content, delta, source, editor) =>
-        setHtmlStr(editor.getHTML())
-      }
+      onChange={(
+        content: any,
+        delta: any,
+        source: any,
+        editor: { getHTML: () => string }
+      ) => handleHtmlStr(editor.getHTML())}
     />
   );
 };

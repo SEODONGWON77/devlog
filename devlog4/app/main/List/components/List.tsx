@@ -1,22 +1,20 @@
 "use client";
 
 import React, { useId, useState, useRef, useEffect } from "react";
-import { useRouter } from 'next/navigation';
-import "react-quill/dist/quill.core.css"
-import "react-quill/dist/quill.snow.css"
-import "react-quill/dist/quill.bubble.css"
-import { Quill } from "react-quill";
+import { useRouter } from "next/navigation";
+import "react-quill/dist/quill.core.css";
+import "react-quill/dist/quill.snow.css";
+import "react-quill/dist/quill.bubble.css";
 import Gallery from "./Gallery";
-import { BASE_URL } from "../constants";
+import { useRecoilValue } from "recoil";
+import { postState } from "app/recoil/state";
 
-const List = ({posts}: any) => {
-
-  const [uniqueKey, setUniqueKey] = useState('');
+const List = ({ posts }: any) => {
+  const [uniqueKey, setUniqueKey] = useState("");
   const titleHeading = useRef();
   const router = useRouter();
 
   const titleProps = (pk: string): any => {
-
     const listKey = pk;
 
     function moveToDetail() {
@@ -28,30 +26,47 @@ const List = ({posts}: any) => {
 
     return {
       ref: titleHeading,
-      onClick: moveToDetail
-    }
+      onClick: moveToDetail,
+    };
   };
-
   const Posts = () => {
     // let newPk: string;
-    return posts.map(({name, htmlStr, index, title, shortContent, createDt}: any) => {
+    return posts.map(
+      ({
+        name,
+        htmlStr,
+        index,
+        title,
+        shortContent,
+        createDt,
+        previewImageUrl,
+      }: any) => {
+        // const newPk: string = `${Math.floor(Math.random() * 100000) + 1}`;
+        // setUniqueKey(newPk);
 
-      // const newPk: string = `${Math.floor(Math.random() * 100000) + 1}`;
-      // setUniqueKey(newPk);
+        const image: string = `https://media.istockphoto.com/id/1322277517/ko/%EC%82%AC%EC%A7%84/%EC%9D%BC%EB%AA%B0%EC%97%90-%EC%82%B0%EC%97%90%EC%84%9C-%EC%95%BC%EC%83%9D-%EC%9E%94%EB%94%94.jpg?s=1024x1024&w=is&k=20&c=aI6xe1rXGKkbA-BdjMwqg5NVXEoOkhIPQe6sy5zTMsA=`;
+        const imsiTitle: string = title ? title : `임시컨텐츠.. 타이틀`;
+        const imsiCont: string = shortContent ? shortContent : "서브내용";
+        const imsiDate: string = createDt
+          ? String(createDt).substring(0, 10)
+          : `1993-05-09`;
 
-      const image: string = `https://media.istockphoto.com/id/1322277517/ko/%EC%82%AC%EC%A7%84/%EC%9D%BC%EB%AA%B0%EC%97%90-%EC%82%B0%EC%97%90%EC%84%9C-%EC%95%BC%EC%83%9D-%EC%9E%94%EB%94%94.jpg?s=1024x1024&w=is&k=20&c=aI6xe1rXGKkbA-BdjMwqg5NVXEoOkhIPQe6sy5zTMsA=`;
-      const imsiTitle: string = title ? title :  `임시컨텐츠.. 타이틀`;
-      const imsiCont: string =  shortContent ? shortContent : "서브내용";
-      const imsiDate: string = createDt ? String(createDt).substring(0,10) : `1993-05-09`;
+        useEffect(() => {
+          // new Quill('.quill-editor', {
+          //   modules: {
+          //     toolbar: false    // Snow includes toolbar by default
+          //   },
+          //   theme: 'snow'
+          // });
+        }, [imsiCont]);
 
-      useEffect(() => {
-        // new Quill('.quill-editor', {
-        //   modules: {
-        //     toolbar: false    // Snow includes toolbar by default
-        //   },
-        //   theme: 'snow'
-        // });
-      }, [imsiCont]);
+        const getIntersectionObserver = () => {
+          const observer = new IntersectionObserver((entries) => {
+            // observer 생성
+            console.log(entries);
+          });
+          return observer;
+        };
 
       return (
         <div
@@ -70,10 +85,10 @@ const List = ({posts}: any) => {
                 <p className="text-sm text-gray-500 dark:text-gray-400">{imsiDate}</p>
             </div>
           </div>
-        </div>
-      )
-    });
-  }
+        );
+      }
+    );
+  };
 
   return (
     <>

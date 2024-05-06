@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import React, { useState } from "react";
-import { searchDropDownList } from "../constants";
+import { searchDropDownList } from "../constant";
 import DropDown from "./DropDown";
 import SearchInput from "./search-input";
 import { useSearch } from "./search-input/hooks/useSearch";
@@ -21,7 +21,6 @@ const Search = ({
   searchBarKeyUp,
   searchResult,
 }: SearchProps) => {
-
   return (
     <div className="flex align-middle justify-center mt-8">
       <div className="w-[50%] h-[3rem] p-[2px] flex border border-solid border-lightGray-20 rounded-md">

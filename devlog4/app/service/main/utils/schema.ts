@@ -1,4 +1,3 @@
-import { DetailResult } from "app/service/detail/utils/schema";
 import { CheckerFunctionError } from "fastest-validator";
 import {
   Schema,
@@ -13,16 +12,6 @@ import {
 import { makeCustomChecker } from "../../../../utils/validate/makeCustomChecker";
 
 @Schema()
-export class MainResponse {
-  constructor(obj: unknown) {
-    Object.assign(this, obj);
-  }
-
-  @NestedArray({ validator: DetailResult })
-  result!: DetailResult[];
-}
-
-@Schema()
 export class SignIngResponse {
   constructor(obj: unknown) {
     Object.assign(this, obj);
@@ -35,8 +24,7 @@ export class SignIngResponse {
   @Number()
   status!: number;
   @String()
-  url!: string; 
-
+  url!: string;
 }
 
 //-------------------------------------------------temp-------------------------------------------------------

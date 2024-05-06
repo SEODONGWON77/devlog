@@ -1,43 +1,44 @@
-import { CheckerFunctionError } from "fastest-validator";
 import {
   Schema,
-  String,
   Number,
-  Boolean,
-  Array,
-  Nested,
+  String,
   NestedArray,
-  Custom,
-  getSchema,
 } from "fastest-validator-decorators";
-import { makeCustomChecker } from "../../../../utils/validate/makeCustomChecker";
 @Schema()
-export class DetailResult {
+export class PostCard {
   constructor(obj: unknown) {
     Object.assign(this, obj);
   }
-  @String()
-  title!: string;
   @Number()
   index!: number;
   @String()
-  htmlStr!: string;
+  title!: string;
   @String()
-  shortContent!: string;
+  htmlstr!: string;
+  @String()
+  shortcontent!: string;
+  @String()
+  previewimageurl!: string;
   @String()
   name!: string;
-  @Array()
-  tagList!: string[];
   @String()
-  updateDt!: string;
+  taglist!: string;
   @String()
-  createDt!: string;
-  @Number()
-  __v!: number;
+  updatedt!: string;
   @String()
-  _id!: string;
-  @Number({ nullable: true })
-  likedCounter!: number;
-  // @Number({ nullable: true })
-  // watchedCounter!: number;
+  createdt!: string;
+  @String()
+  likedcounter!: string;
+  // @String({ nullable: true })
+  // watchedcounter!: string | null;
+}
+
+@Schema()
+export class GetPostCardListResponse {
+  constructor(obj: unknown) {
+    Object.assign(this, obj);
+  }
+
+  @NestedArray({ validator: PostCard })
+  response!: PostCard[];
 }

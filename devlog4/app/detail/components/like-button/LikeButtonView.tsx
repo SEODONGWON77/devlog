@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { createAllRestFetchByDevlog } from "utils/api/fetch/devlogApiRestFetch";
+import { updatePostLikeCounter } from "app/lib/action";
 
 interface LikeButtonViewProps {
   count?: number;
@@ -9,18 +10,30 @@ interface LikeButtonViewProps {
 const LikeButtonView = React.forwardRef<
   HTMLInputElement,
   LikeButtonViewProps
->(({count, _id}, ref): any => {
+>(({count = 0, _id}, ref): any => {
 
   const [countLike, setCountLike] = useState(count);
   
   const onClickLikeAdded = async () => {
-    setCountLike((count || 0) + 1);
-    const allFetch = createAllRestFetchByDevlog("post");
-    const result = await allFetch.postFetch("", {
+
+    // console.log(countLike)
+
+    // setCountLike(((counts) => ++ counts )((Number(countLike) || 0)));
+    // const allFetch = createAllRestFetchByDevlog("post");
+    /*const result = await allFetch.postFetch("", {
       _id,
       likedCounter: countLike,
-    });
-    return result;
+    });*/
+
+    count = Number(count) + 1;
+    setCountLike(count);
+
+
+    console.log('콘솔 count ', count, ', index: ', _id);
+
+    updatePostLikeCounter(_id, { likedCounter: count}).then(data => console.log('콘솔 likedCounter 결과 :: ', data));
+
+    return countLike;
   };
 
   return (

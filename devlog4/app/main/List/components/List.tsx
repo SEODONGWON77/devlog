@@ -6,22 +6,33 @@ import "react-quill/dist/quill.core.css";
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
 import Gallery from "./Gallery";
-import { useRecoilValue } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { postState } from "app/recoil/state";
+import { getPost2 } from "app/lib/action";
 
 const List = ({ posts }: any) => {
   const [uniqueKey, setUniqueKey] = useState("");
   const titleHeading = useRef();
   const router = useRouter();
 
+  const setPostState = useSetRecoilState(postState);
+
   const titleProps = (pk: string): any => {
     const listKey = pk;
 
-    function moveToDetail() {
+    async function moveToDetail() {
       // const titleElement: any = titleHeading.current;
       // console.log('콘솔 headTag', titleElement.__reactFiber$s0h0hrp4ijn);
       // router.push(`/detail/${titleElement.dataId}` as string);
-      router.push(`/detail/${listKey}` as string);
+      // router.push(`/detail/${listKey}` as string);
+      
+      getPost2(listKey).then((data: Array<any>): any => {
+        console.log('콘솔 getPost2.... data: ', data);
+
+        setPostState(data[0]);
+
+        router.push(`/detail/${listKey}`);
+      });
     }
 
     return {

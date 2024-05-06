@@ -3,6 +3,7 @@ module.exports = {
   reactStrictMode: true,
   experimental: {
     appDir: true,
+    serverActions: true,
   },
   env: {
     ACCESS_KEY: process.env.NEXT_PUBLIC_ACCESS_KEY,

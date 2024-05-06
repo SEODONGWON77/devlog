@@ -2,15 +2,15 @@ import { wrappedValidate } from "utils/validate/wrappedValidate";
 import {
   GetClaimListResponse,
   GetPatentNumberResponse,
-  MainResponse,
   SignIngResponse,
 } from "./schema";
+import { GetPostCardListResponse } from "app/service/detail/utils/schema";
 
-export const validateGetMainResult = async (getMainResponse: unknown) => {
-  const result = new MainResponse(getMainResponse);
+export const validateGetPostCardListResult = async (response: unknown) => {
+  const result = new GetPostCardListResponse(response);
   await wrappedValidate(result);
 
-  return result.result;
+  return result;
 };
 
 export const validateGetSignInResult = async (getSignInResponse: unknown) => {

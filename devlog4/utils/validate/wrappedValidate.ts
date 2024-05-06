@@ -1,7 +1,9 @@
 import { validate } from "fastest-validator-decorators";
 import { ApiError } from "../api/apiError";
 
-export const wrappedValidate = async <T extends abstract new () => T>(schemaInstance: InstanceType<T>) => {
+export const wrappedValidate = async <T extends abstract new () => T>(
+  schemaInstance: InstanceType<T>
+) => {
   const valid = await validate(schemaInstance);
   if (valid === true) {
     return;

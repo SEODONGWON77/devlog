@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NextPage } from "next";
 import AWS from "aws-sdk";
 import ReactQuill from "react-quill";
@@ -8,6 +8,13 @@ import dayjs from "dayjs";
 import hljs from "highlightjs";
 import "highlightjs/styles/vs2015.css";
 import { uploadFile } from "./utils";
+import {
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from "recoil";
+import { imageUrlListState } from "app/recoil/state";
 
 interface IEditor {
   htmlStr: string | null;
@@ -18,23 +25,10 @@ hljs.configure({
   languages: ["javascript", "ruby", "python", "rust"],
 });
 
-const ACCESS_KEY = process.env.NEXT_PUBLIC_ACCESS_KEY;
-const SECRET_ACCESS_KEY = process.env.NEXT_PUBLIC_SECRET_ACCESS_KEY;
-const REGION = process.env.NEXT_PUBLIC_REGION;
-const S3_BUCKET = process.env.NEXT_PUBLIC_S3_BUCKET;
-
-AWS.config.update({
-  accessKeyId: ACCESS_KEY,
-  secretAccessKey: SECRET_ACCESS_KEY,
-});
-
-const myBucket = new AWS.S3({
-  params: { Bucket: S3_BUCKET },
-  region: REGION,
-});
-
-const Editor: NextPage<IEditor> = ({ htmlStr, handleHtmlStr }) => {
+const Editor = ({ htmlStr, handleHtmlStr }: IEditor) => {
   const quillRef = React.useRef<ReactQuill>(null);
+  const prevImageUrlList = useRecoilValue(imageUrlListState);
+  const setImageUrlList = useSetRecoilState(imageUrlListState);
 
   const imageHandler = () => {
     const input = document.createElement("input");
@@ -54,6 +48,9 @@ const Editor: NextPage<IEditor> = ({ htmlStr, handleHtmlStr }) => {
           const fileId = dayjs().format("YYYYMMDDHHmmssSSS");
           const fileName = `${fileId}_${file[0].name}`;
           const res = await uploadFile(file[0], fileName);
+          if (res) {
+            setImageUrlList((prevList) => [...prevList, res.Location]);
+          }
           if (quillRef.current) {
             const index = (
               quillRef.current.getEditor().getSelection() as RangeStatic
@@ -128,6 +125,7 @@ const Editor: NextPage<IEditor> = ({ htmlStr, handleHtmlStr }) => {
   ];
   const ReactQuill =
     typeof window === "object" ? require("react-quill") : () => false;
+
   return (
     <ReactQuill
       ref={quillRef}

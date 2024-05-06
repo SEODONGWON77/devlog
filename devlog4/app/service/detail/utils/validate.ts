@@ -1,10 +1,10 @@
 import { wrappedValidate } from "utils/validate/wrappedValidate";
-import { DetailResult } from "./schema";
+// import { DetailResult } from "./schema";
 
 export const validateGetSearchResult = async (getSearchResult: unknown) => {
-  const result = new DetailResult(getSearchResult);
+  // const result = new DetailResult(getSearchResult);
 
-  await wrappedValidate(result);
+  // await wrappedValidate(result);
 
-  return result;
+  // return result;
 };

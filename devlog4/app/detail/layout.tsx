@@ -12,14 +12,13 @@ const MainLayout = ({ children }: Props) => {
     <div>
       <Header />
       <div className="flex h-full">
-        <div className="w-[15%] h-full shrink-0">{/* <FloatList /> */}</div>
+        <div className="w-[15%] h-full shrink-0">
+          <FloatList />
+        </div>
         <div className="w-[70%] h-full shrink-0">
           <div className="w-full h-full relative top-[100px]">{children}</div>
         </div>
-        <div className="w-[15%] h-full shrink-0">
-          <FloatList />
-          <TopButton />
-        </div>
+        <div className="w-[15%] h-full shrink-0"></div>
       </div>
     </div>
   );

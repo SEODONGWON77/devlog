@@ -29,3 +29,22 @@ export const uploadFile = async (file: File, fileName: string) => {
       return res;
     });
 };
+
+const s3 = new AWS.S3({
+  accessKeyId: ACCESS_KEY,
+  secretAccessKey: SECRET_ACCESS_KEY,
+  region: REGION,
+});
+
+export const deleteFile = async (fileName: string) => {
+  const params = {
+    Bucket: S3_BUCKET,
+    Key: "upload/" + `${fileName}`,
+  };
+  return await myBucket
+    .deleteObject(params)
+    .promise()
+    .then((res) => {
+      return res;
+    });
+};

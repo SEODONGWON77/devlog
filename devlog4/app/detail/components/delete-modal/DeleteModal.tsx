@@ -47,7 +47,7 @@ const DeleteModal = ({
             onClick={onClickSubmit}
             className="mr-[10px] mt-[10px] font-bold leading-9  rounded h-9 w-14  text-md"
           >
-            완료
+            삭제
           </button>
         </div>
       </div>

@@ -39,30 +39,46 @@ function Post({ searchParams }: Props) {
 
   const [title, setTitle] = useState("");
   const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [htmlStr, setHtmlStr] = useState<string | null>(null);
   const tagList = useRef<string[]>([]);
   const [isThumbNailModalOpen, setIsThumbNailModalOpen] = useState(false);
+  
+  
   const { data } = useSession();
 
-  // const postData: any = useRecoilValueLoadable(postState);
-  // const loginUserName = useRecoilValueLoadable(userNameState);
+  const postData: any = useRecoilValueLoadable(postState);
+  const loginUserName = useRecoilValueLoadable(userNameState);
+  const loginUserEmail = useRecoilValueLoadable(userEmailState);
   const imageUrlList = useRecoilValueLoadable(imageUrlListState);
 
-  // useEffect(() => {
+  useEffect(() => {
   //   // if (viewContainerRef.current) {
   //   //   viewContainerRef.current.innerHTML =
   //   //     "<h2>html 코드를 이용하여 만들어지는 View입니다.</h2>";
   //   //   viewContainerRef.current.innerHTML += htmlStr;
   //   // }
-  //   if (searchParams.edit && loginUserName) {
-  //     setUserName(loginUserName as unknown as string);
-  //     setTitle(postData.title);
-  //     setHtmlStr(postData.htmlstr);
-  //     tagList.current = postData.taglist;
-  //   } else {
-  //     setUserName(typeof data?.user?.name !== "string" ? "" : data?.user?.name);
-  //   }
-  // }, []);
+    if (searchParams.edit && loginUserName) {
+      console.log("콘솔 loginUserName.. " , loginUserName);
+      console.log("콘솔 postData.. " , postData.contents);
+
+      const {
+        title,
+        htmlstr,
+        taglist,
+      } = postData.contents;
+
+      setUserName(loginUserName.contents as unknown as string);
+      setTitle(title);
+      setHtmlStr(htmlstr);
+      
+      // tagList.current = 
+      getSplitTagList(((textList) => textList.join(' '))(JSON.parse(taglist)));
+
+    } else {
+      setUserName(typeof data?.user?.name !== "string" ? "" : data?.user?.name);
+    }
+  }, []);
 
   const onChangeHandler = (text: string) => {
     const modifyText = text.replace(/\s+/g, " ");
@@ -90,15 +106,16 @@ function Post({ searchParams }: Props) {
     previewImageUrl: string,
     shortIntrodution: string
   ) => {
+    
     const obj = {
-      name: userName,
+      name: loginUserName.contents,
+      email: loginUserEmail.contents,
       htmlStr,
       title,
       shortContent: shortIntrodution,
       tagList: tagList.current,
       previewImageUrl,
     };
-
     newPost(obj);
     // try {
     //   const client = await db.connect();

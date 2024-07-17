@@ -38,6 +38,7 @@ export const postState = atom({
     htmlstr: "",
     shortcontent: "",
     name: "",
+    email: "",
     taglist: "",
     updatedt: "",
     createdt: "",

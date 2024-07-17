@@ -18,6 +18,7 @@ const Card = ({
     index,
     likedcounter,
     name,
+    email,
     shortcontent,
     taglist,
     title,

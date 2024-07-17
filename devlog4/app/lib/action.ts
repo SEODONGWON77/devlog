@@ -9,7 +9,7 @@ export async function getUsers() {
   try {
     const client = await db.connect();
     // Create the "invoices" table if it doesn't exist
-    console.log(`>>>>>>>>>>>>>>>>>>>>>> START >> SELECT "user_test" table`);
+    console.log(`>>>>>>>>>>>>>>>>>>>>>> ACTION >> getUsers `);
     const selectTable = await client.sql`SELECT
         name
         , email
@@ -30,6 +30,7 @@ export async function getPostCardList() {
   const selectTable = await client.sql`SELECT
     index::INTEGER
     , name
+    , email
     , title
     , taglist
     , previewimageurl
@@ -49,7 +50,7 @@ export async function getPost2(indexId: string) {
     const client = await db.connect();
     // Create the "invoices" table if it doesn't exist
     console.log(
-      `>>>>>>>>>>>>>>>>>>>>>> START >> SELECT "post" table, indexId: `,
+      `>>>>>>>>>>>>>>>>>>>>>> ACTION >> getPostCardList, indexId: `,
       indexId
     );
 
@@ -60,7 +61,7 @@ export async function getPost2(indexId: string) {
 
     return selectTable.rows;
   } catch (error) {
-    console.error(`[Error] Execute 'getPost2' ... `, error);
+    console.error(`[Error] Execute ACTION 'getPost2' ... `, error);
     throw error;
   }
 }
@@ -70,7 +71,7 @@ export async function deletePostWithIndex(
 ) {
   try {
     const client = await db.connect();
-    console.log(`>>>>>>>>>>>>>>>>>>>>>> START >> DELETE "post" table by index`);
+    console.log(`>>>>>>>>>>>>>>>>>>>>>> ACTION >> deletePostWithIndex `);
 
     await client.sql`DELETE FROM post WHERE index = ${index}`;
   } catch (error) {
@@ -85,7 +86,7 @@ export async function updatePostLikeCounter(
 ) {
   try {
     const client = await db.connect();
-    console.log(`>>>>>>>>>>>>>>>>>>>>>> START >> UPDATE "post" table`);
+    console.log(`>>>>>>>>>>>>>>>>>>>>>> ACTION >> updatePostLikeCounter `);
 
     await client.sql`UPDATE post SET likedcounter = ${likedCounter} WHERE index = ${index} `;
   } catch (error) {
@@ -145,13 +146,15 @@ export async function updatePostLikeCounter(
 
 export async function newPost({
   name,
+  email,
   htmlStr,
   title,
   shortContent,
   tagList,
   previewImageUrl,
 }: {
-  name: string; // email 변경필요..
+  name: string;
+  email: string;
   htmlStr: string | null;
   title: string;
   shortContent: string;
@@ -159,14 +162,16 @@ export async function newPost({
   previewImageUrl: string;
 }) {
   // Insert data into the database
-  console.log('콘솔 newPost', name, htmlStr, title, shortContent, tagList, previewImageUrl);
+  console.log('콘솔 newPost', name, email, htmlStr, title, shortContent, tagList, previewImageUrl);
 
   try {
     const client = await db.connect();
-    console.log(`>>>>>>>>>>>>>>>>>>>>>> START >> INSERT "post" table`);
+    console.log(`>>>>>>>>>>>>>>>>>>>>>> ACTION >> newPost `);
+    console.log(`>>>>>>>>>>>>>>>>>>>>>> ACTION >> newPost.. name: `, name);
+    console.log(`>>>>>>>>>>>>>>>>>>>>>> ACTION >> newPost.. email: `, email);
     // const data =
     //   await client.sql`INSERT INTO post (name, htmlStr, title, shortContent, createDt, updateDt, index, tagList, previewImageUrl, likedCounter)
-    //   VALUES ('111', '<html>Content 122</html>', 'Sample Title 1', 'Short content 1', '2024-01-11', '2024-01-11', 4, 'tag1, tag2', 'image_url_1', 0)`;
+    //   VALUES ('111', '<html>Czontent 122</html>', 'Sample Title 1', 'Short content 1', '2024-01-11', '2024-01-11', 4, 'tag1, tag2', 'image_url_1', 0)`;
     const now = ((dates) =>
       `${dates.getFullYear()}-${dates.getMonth() + 1}-${dates.getDate()}`)(
       new Date()
@@ -174,6 +179,7 @@ export async function newPost({
     const postCounter = await client.sql`SELECT * FROM post`;
     const insertTable = await client.sql`INSERT INTO post (
       name
+      , email
       , htmlstr
       , title
       , shortcontent
@@ -185,6 +191,7 @@ export async function newPost({
       , likedcounter)
       VALUES (
         ${name}
+        , ${email}
         , ${htmlStr}
         , ${title}
         , ${shortContent}
@@ -196,7 +203,7 @@ export async function newPost({
         , ${0}
       );`;
     console.log(
-      `>>>>>>>>>>>>>>>>>>>>>> END >> INSERT "post" table: ${JSON.stringify(
+      `>>>>>>>>>>>>>>>>>>>>>> ACTION >> INSERT "post" table: ${JSON.stringify(
         insertTable.rows
       )}`
     );

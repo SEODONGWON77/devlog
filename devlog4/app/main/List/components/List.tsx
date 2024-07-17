@@ -45,6 +45,7 @@ const List = ({ posts }: any) => {
     return posts.map(
       ({
         name,
+        email,
         htmlStr,
         index,
         title,

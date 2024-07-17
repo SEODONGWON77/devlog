@@ -22,6 +22,8 @@ export class PostCard {
   @String()
   name!: string;
   @String()
+  email!: string;
+  @String()
   taglist!: string;
   @String()
   updatedt!: string;

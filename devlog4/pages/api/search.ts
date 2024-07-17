@@ -8,12 +8,13 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const { name, htmlStr, title, shortContent } = req.body;
+    const { name, email, htmlStr, title, shortContent } = req.body;
     let { seq } = await Counter.findByIdAndUpdate("userid", {
       $inc: { seq: 1 },
     });
     const post = await Post.create({
       name: name,
+      email: email,
       htmlStr: htmlStr,
       title: title,
       shortContent: shortContent,

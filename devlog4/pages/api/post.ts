@@ -9,7 +9,7 @@ export default async function handler(
 ) {
   dbConnect();
   if (req.method === "POST") {
-    const { name, htmlStr, title, shortContent, tagList, previewImageUrl, likedCounter, _id } = req.body;
+    const { name, email, htmlStr, title, shortContent, tagList, previewImageUrl, likedCounter, _id } = req.body;
 
     if ((likedCounter !== undefined) && _id) {
       const counter = await Post.updateOne({_id}, {
@@ -23,6 +23,7 @@ export default async function handler(
       });
       const post = await Post.create({
         name: name,
+        email: email,
         htmlStr: htmlStr,
         title: title,
         shortContent: shortContent,

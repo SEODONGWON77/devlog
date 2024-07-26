@@ -16,7 +16,7 @@ const Main = async ({}: Props) => {
         <Header />
       </div>
       <div className="h-[330px] relative w-full bg-[#5bbdff] flex justify-center items-center text-white">
-        teamDevelop
+        teamDevelop2
       </div>
       <div className="w-full flex">
         <div className="w-[10%]"></div>

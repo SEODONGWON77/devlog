@@ -216,3 +216,35 @@ export async function newPost({
   revalidatePath("/main");
   redirect("/main");
 }
+
+export async function searchPosts(searchTerm: string) {
+  try {
+    const client = await db.connect();
+    console.log(`>>>>>>>>>>>>>>>>>>>>>> ACTION >> searchPosts `);
+
+    const searchResults = await client.sql`
+      SELECT 
+        index::INTEGER,
+        name,
+        email,
+        title,
+        shortcontent,
+        taglist,
+        previewimageurl,
+        likedcounter,
+        updatedt,
+        createdt
+      FROM post
+      WHERE 
+        name ILIKE ${`%${searchTerm}%`} OR
+        title ILIKE ${`%${searchTerm}%`} OR
+        shortcontent ILIKE ${`%${searchTerm}%`} OR
+        htmlstr ILIKE ${`%${searchTerm}%`}
+    `;
+
+    return searchResults.rows;
+  } catch (error) {
+    console.error(`[Error] Execute 'searchPosts' ... `, error);
+    throw error;
+  }
+}

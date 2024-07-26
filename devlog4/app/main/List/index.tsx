@@ -16,15 +16,11 @@ const List = ({ postCardList }: ListProps) => {
   const userName = useRecoilValue(userNameState);
 
   const {
-    searchOriginalWord,
     searchWord,
+    searchResult,
     changeSearchWord,
     searchBarKeyUp,
-    enteringSearchWord,
-    isSearch,
-    searchResult,
   } = useSearch();
-
   return (
     <Fragment>
       <Search
@@ -33,9 +29,16 @@ const List = ({ postCardList }: ListProps) => {
         changeSearchWord={changeSearchWord}
         searchResult={searchResult}
       />
-      {postCardList.map((postCard, index) => {
-        return <Card key={`${postCard.createdt}${index}`} card={postCard} />;
-      })}
+      {searchResult === null 
+        ?  postCardList.map((postCard, index) => {
+            return <Card key={`${postCard.createdt}${index}`} card={postCard} />;
+           })
+        :  searchResult.length > 0 
+          ? searchResult.map((postCard, index) => {
+              return <Card key={`${postCard.createdt}${index}`} card={postCard} />;
+            })
+          : <div>검색결과 없음</div>
+      }
     </Fragment>
   );
 };

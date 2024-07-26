@@ -1,5 +1,6 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
+import { searchPosts } from "app/lib/action";
+import { PostCard } from "app/service/detail/utils/schema";
+import React, { useState, useEffect, useCallback } from "react";
 
 export function useSearch() {
   const [searchWord, setSearchWord] = useState<string>("");
@@ -7,11 +8,14 @@ export function useSearch() {
   const [enteringSearchWord, setEnteringSearchWord] = useState<string>("");
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [isSearch, setIsSearch] = useState<boolean>(false);
-  const [searchResult, setSearchResult] = useState<any>();
+  const [searchResult, setSearchResult] = useState<PostCard[] | null>(null);
 
   const changeSearchWord = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchOriginalWord(e.target.value);
     setSearchWord(e.target.value);
+    if(e.target.value === "") {
+      setSearchResult(null)
+    }
   };
 
   const searchBarKeyUp = (e: React.KeyboardEvent) => {
@@ -22,34 +26,19 @@ export function useSearch() {
     setCurrentIdx(0);
   };
 
-  const getPatentNumberMap = async (searchString: string) => {
-    const { data } = await axios.post(`_search/`, {
-      query: {
-        bool: {
-          must: [
-            {
-              term: {
-                title: `${searchString}`,
-              },
-            },
-          ],
-        },
-      },
-    });
-    if (data.hits.hits.length === 0) setIsSearch(false);
-    else setIsSearch(true);
-
-    const resultList: any[] = [];
-    data.hits.hits.forEach((hit: any) => {
-      resultList.push(hit._source);
-    });
-    return setSearchResult(resultList);
-  };
+  const getSearchCardList = useCallback(
+    debounce(async (searchString: string) => {
+      if (searchString.length === 0) return;
+      const res = await searchPosts(searchString);
+      setSearchResult(res as PostCard[]);
+    }, 1000),
+    []
+  );
 
   useEffect(() => {
-    if (enteringSearchWord.length === 0) return;
-    getPatentNumberMap(enteringSearchWord);
-  }, [searchOriginalWord, enteringSearchWord]);
+    getSearchCardList(searchOriginalWord);
+  }, [searchOriginalWord, getSearchCardList]);
+
   return {
     searchOriginalWord,
     searchWord,
@@ -58,5 +47,14 @@ export function useSearch() {
     searchBarKeyUp,
     isSearch,
     searchResult,
+  };
+}
+
+function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => void {
+  let timeout: NodeJS.Timeout | null = null;
+  return function(this: any, ...args: Parameters<T>) {
+    const context = this;
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), wait);
   };
 }

@@ -84,8 +84,6 @@ const DetailItem = (detailData: DetailItemProps) => {
           </div>
           <div className="py-2">
             <span className="font-bold text-sky-400">{data.name}</span>
-            <span className="font-bold"> · </span>
-            <span>{data.email}</span>
             <span className="float-right flex">{/* useEmail 로 변경할 부분!!! */userName == data.name && <EditButton deleteIndex={detailIndex}/>}</span>
           </div>
           <div className="py-2">

@@ -45,7 +45,7 @@ const Header = () => {
               </Link>
             </Fragment>
           ) : (
-            <Link className="nav-link" href="auth/login">
+            <Link className="nav-link" href="/auth/login">
               Login
             </Link>
           )}

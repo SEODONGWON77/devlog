@@ -91,11 +91,11 @@ const List = ({ posts }: any) => {
               <div className="p-5">
                 <h5
                   {...titleProps(index)}
-                  className="cursor-pointer mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+                  className="cursor-pointer mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-ellipsis whitespace-nowrap overflow-hidden"
                 >
                   {imsiTitle}
                 </h5>
-                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 text-ellipsis whitespace-nowrap overflow-hidden">
                   {imsiCont}
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">

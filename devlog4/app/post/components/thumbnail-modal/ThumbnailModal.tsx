@@ -12,10 +12,9 @@ interface ThumbnailModalProps {
   title: string;
   userName: string;
   handleCloseModal: () => void;
-  handleSubmit: (previewImageUri: string, shortIntrodution: string) => void;
+  handleSubmit: (previewImageUri: string, shortIntrodution: string, editSubmit?: boolean, editImage?: boolean) => void;
   editMode: boolean;
 }
-
 const image: string = `https://media.istockphoto.com/id/1322277517/ko/%EC%82%AC%EC%A7%84/%EC%9D%BC%EB%AA%B0%EC%97%90-%EC%82%B0%EC%97%90%EC%84%9C-%EC%95%BC%EC%83%9D-%EC%9E%94%EB%94%94.jpg?s=1024x1024&w=is&k=20&c=aI6xe1rXGKkbA-BdjMwqg5NVXEoOkhIPQe6sy5zTMsA=`;
 
 const index = 1;
@@ -29,8 +28,8 @@ const ThumbnailModal = ({
   editMode,
 }: ThumbnailModalProps) => {
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
-  const [shortIntrodution, setShortIntrodution] =
-    useState<string>("짧은 소개글");
+  const [shortIntrodution, setShortIntrodution] = useState<string>("짧은 소개글");
+  const [loadingStatus, setLoadingStatus] = useState(false);
   const [previewImage, setPreviewImage] = useState<File | null>(null);
 
   const postData: any = useRecoilValue(postState);
@@ -46,8 +45,7 @@ const ThumbnailModal = ({
 
     setShortIntrodution(postData.shortcontent);
     setPreviewImageUrl(postData.previewimageurl);
-    setPreviewImage(previewImageUrl && new File([previewImageUrl], "name") || null);
-
+    //handleThumbnailImageUrl(((imageUrl) => new File([imageUrl], imageUrl.split('upload/').slice(-1)))(postData.previewimageurl));
   }
 
   const handleThumbnailImageUrl = (file: File) => {
@@ -60,24 +58,26 @@ const ThumbnailModal = ({
   };
 
   const onClickSubmit = async () => {
-    if (editMode) { return alert("!!!! 아직 구현안함!!!!! 이제 해야함 ㅠㅠ (2024-03-20)");}
+    if (!previewImage && previewImageUrl && editMode) {
+      return handleSubmit(previewImageUrl, shortIntrodution, editMode);
+    }
 
     if (previewImage === null) return alert("썸네일 이미지를 등록해주세요.");
-    const fileExt = previewImage.name.split(".").pop();
-    if (
-      previewImage.type === "image/jpeg" ||
-      fileExt === "jpg" ||
-      previewImage.type === "image/png" ||
-      fileExt === "png"
-    ) {
-      const fileId = dayjs().format("YYYYMMDDHHmmssSSS");
-      const fileName = `${fileId}_${previewImage.name}`;
-      const res = await uploadFile(previewImage, fileName);
-      return handleSubmit(res.Location, shortIntrodution);
-    } else {
-      alert("jpg, png 파일만 Upload 가능합니다.");
-      return;
-    }
+      const fileExt = previewImage.name.split(".").pop();
+      if (
+        previewImage.type === "image/jpeg" ||
+        fileExt === "jpg" ||
+        previewImage.type === "image/png" ||
+        fileExt === "png"
+      ) {
+        const fileId = dayjs().format("YYYYMMDDHHmmssSSS");
+        const fileName = `${fileId}_${previewImage.name}`;
+        const res = await uploadFile(previewImage, fileName);
+        return handleSubmit(res.Location, shortIntrodution, editMode, true);
+      } else {
+        alert("jpg, png 파일만 Upload 가능합니다.");
+        return;
+      }
   };
 
   const onChangeShortIntro = (value: string) => {

@@ -3,7 +3,7 @@
 import { db, sql } from "@vercel/postgres";
 import { validateGetPostCardListResult } from "app/service/main/utils/validate";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { permanentRedirect, redirect } from "next/navigation";
 
 export async function getUsers() {
   try {
@@ -27,7 +27,8 @@ export async function getUsers() {
 
 export async function getPostCardList() {
   const client = await db.connect();
-  const selectTable = await client.sql`SELECT
+  const selectTable = await client.sql`
+  SELECT
     index::INTEGER
     , name
     , email
@@ -40,7 +41,8 @@ export async function getPostCardList() {
     , taglist
     , updatedt
     , createdt
-   FROM post`;
+  FROM post
+    ORDER BY createdt DESC`;
   const data = { response: selectTable.rows };
   return validateGetPostCardListResult(data);
 }
@@ -73,7 +75,7 @@ export async function deletePostWithIndex(
     const client = await db.connect();
     console.log(`>>>>>>>>>>>>>>>>>>>>>> ACTION >> deletePostWithIndex `);
 
-    await client.sql`DELETE FROM post WHERE index = ${index}`;
+    await client.sql`DELETE FROM post WHERE index = ${index}::INTEGER`;
   } catch (error) {
     console.error(`[Error] Execute 'updatePostLikeCounter' ... `, error);
     throw error;
@@ -95,56 +97,7 @@ export async function updatePostLikeCounter(
   }
 }
 
-// export async function updatePost(index: string, params:
-//   {
-//     //name?: string;
-//     htmlStr?: string | null;
-//     title?: string;
-//     shortContent?: string;
-//     tagList?: string[];
-//     previewImageUrl?: string;
-//     likedCounter?: number;
-//   }) {
-//   // Insert data into the database
-
-//   try {
-//     const client = await db.connect();
-//     console.log(`>>>>>>>>>>>>>>>>>>>>>> START >> UPDATE "post" table` + params.likedCounter);
-
-//     const paramKey = Object.keys(params);
-//     const paramValues = Object.values(params);
-
-//     if (paramKey.length > 0) {
-//       const paramKeyScript = 'UPDATE post SET ' + ((keyOrder) => {
-//         const keyArr = [];
-//         do {
-//           keyArr.push('$' + keyOrder);
-//           keyOrder -= 1;
-//           console.log(keyOrder);
-//         } while (keyOrder > 0);
-
-//         console.log("???????????????????????????", keyArr);
-
-//         return keyOrder > 1 ? keyArr.reverse().join(', ') :  keyArr.join('');
-//       })(paramKey.length) + ' WHERE index = ' + index;
-
-//       console.log(paramKeyScript);
-
-//       const res = await client.query(paramKeyScript, paramValues);
-
-//       return res.rows[0];
-//     }
-
-//     //console.log(res.rows[0])
-//     // const resultData = await getPost();
-
-//   } catch (error) {
-//     console.error(`[Error] Execute 'updatePost' ... `, error);
-//     throw error;
-//   }
-// }
-
-export async function newPost({
+export async function handlePost({
   name,
   email,
   htmlStr,
@@ -152,6 +105,9 @@ export async function newPost({
   shortContent,
   tagList,
   previewImageUrl,
+  index,
+  createDt,
+  likedCounter,
 }: {
   name: string;
   email: string;
@@ -160,15 +116,16 @@ export async function newPost({
   shortContent: string;
   tagList: string[];
   previewImageUrl: string;
-}) {
-  // Insert data into the database
-  console.log('콘솔 newPost', name, email, htmlStr, title, shortContent, tagList, previewImageUrl);
 
+  index?: number;
+  createDt?: Date;
+  likedCounter?: number;
+},
+update?: boolean,) {
+  // Insert data into the database
   try {
     const client = await db.connect();
-    console.log(`>>>>>>>>>>>>>>>>>>>>>> ACTION >> newPost `);
-    console.log(`>>>>>>>>>>>>>>>>>>>>>> ACTION >> newPost.. name: `, name);
-    console.log(`>>>>>>>>>>>>>>>>>>>>>> ACTION >> newPost.. email: `, email);
+    console.log(`>>>>>>>>>>>>>>>>>>>>>> ACTION >> newPost `, name, email, htmlStr, title, shortContent, tagList, previewImageUrl, index, createDt, likedCounter);
     // const data =
     //   await client.sql`INSERT INTO post (name, htmlStr, title, shortContent, createDt, updateDt, index, tagList, previewImageUrl, likedCounter)
     //   VALUES ('111', '<html>Czontent 122</html>', 'Sample Title 1', 'Short content 1', '2024-01-11', '2024-01-11', 4, 'tag1, tag2', 'image_url_1', 0)`;
@@ -177,7 +134,24 @@ export async function newPost({
       new Date()
     );
     const postCounter = await client.sql`SELECT * FROM post`;
-    const insertTable = await client.sql`INSERT INTO post (
+
+    const updatePost = () => client.sql`
+    UPDATE post
+      SET
+        name = ${name}
+        , email = ${email}
+        , htmlStr = ${htmlStr}
+        , title = ${title}
+        , shortcontent = ${shortContent}
+        , updatedt = ${now}
+        , taglist = ${JSON.stringify(tagList)}
+        , previewimageurl = ${previewImageUrl}
+        , likedcounter = ${likedCounter}::INTEGER
+      WHERE
+        index = ${index}::INTEGER`;
+    
+    const insertPost = () => client.sql`
+    INSERT INTO post (
       name
       , email
       , htmlstr
@@ -202,9 +176,12 @@ export async function newPost({
         , ${previewImageUrl}
         , ${0}
       );`;
+
+    const resultQuery = await (update ? updatePost() : insertPost());
+
     console.log(
       `>>>>>>>>>>>>>>>>>>>>>> ACTION >> INSERT "post" table: ${JSON.stringify(
-        insertTable.rows
+        resultQuery.rows
       )}`
     );
   } catch (error) {
@@ -214,7 +191,8 @@ export async function newPost({
 
   // Revalidate the cache for the invoices page and redirect the user.
   revalidatePath("/main");
-  redirect("/main");
+  // redirect("/main");
+  permanentRedirect("/main");
 }
 
 export async function searchPosts(searchTerm: string) {

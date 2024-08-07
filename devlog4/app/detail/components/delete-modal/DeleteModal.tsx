@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import  {useRouter} from "next/navigation";
-
+import { revalidatePath } from "next/cache";
+import  {useRouter, redirect} from "next/navigation";
 import BaseModal from "app/components/base-modal";
 import { deletePostWithIndex } from "app/lib/action";
 
@@ -18,9 +18,10 @@ const DeleteModal = ({
   const router = useRouter();
 
   const onClickSubmit = async () => {
+    console.error(deleteIndex);
     deletePostWithIndex(deleteIndex).then(() => {
-      console.log('콘솔 goto main');
       router.push(`/main`);
+      router.refresh();
     });
   };
 

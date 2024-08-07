@@ -27,7 +27,7 @@ import { useRouter, useParams, useSearchParams } from "next/navigation";
 import ThumbnailModal from "./components/thumbnail-modal/ThumbnailModal";
 import { useSession } from "next-auth/react";
 import { db, sql } from "@vercel/postgres";
-import { newPost } from "app/lib/action";
+import { handlePost } from "app/lib/action";
 import { deleteFile } from "app/components/utils";
 import useCustomBack from "app/hooks/useCustomBack";
 type Props = {
@@ -41,9 +41,14 @@ function Post({ searchParams }: Props) {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [htmlStr, setHtmlStr] = useState<string | null>(null);
+
+  const [indexOrigin, setIndexOrigin] = useState(0);
+  const [createDt, setCreatedt] = useState(new Date());
+  const [likedCounter, setLikedcounter] = useState(0);
+  const [previewImageUrlOrigin, setPreviewImageUrlOrigin] = useState("");
+
   const tagList = useRef<string[]>([]);
   const [isThumbNailModalOpen, setIsThumbNailModalOpen] = useState(false);
-  
   
   const { data } = useSession();
 
@@ -66,11 +71,20 @@ function Post({ searchParams }: Props) {
         title,
         htmlstr,
         taglist,
+        index,
+        createdt,
+        likedcounter,
+        previewimageurl,
       } = postData.contents;
 
       setUserName(loginUserName.contents as unknown as string);
       setTitle(title);
       setHtmlStr(htmlstr);
+
+      setIndexOrigin(index);
+      setCreatedt(new Date(createdt));
+      setLikedcounter(likedcounter);
+      setPreviewImageUrlOrigin(previewimageurl);
       
       // tagList.current = 
       getSplitTagList(((textList) => textList.join(' '))(JSON.parse(taglist)));
@@ -104,7 +118,9 @@ function Post({ searchParams }: Props) {
 
   const handleSubmit = async (
     previewImageUrl: string,
-    shortIntrodution: string
+    shortIntrodution: string,
+    updatePost?: boolean,
+    updateImage?: boolean,
   ) => {
     
     const obj = {
@@ -114,28 +130,13 @@ function Post({ searchParams }: Props) {
       title,
       shortContent: shortIntrodution,
       tagList: tagList.current,
-      previewImageUrl,
+      previewImageUrl: updateImage ? previewImageUrl : previewImageUrlOrigin,
+      index: indexOrigin,
+      createDt,
+      likedCounter,
     };
-    newPost(obj);
-    // try {
-    //   const client = await db.connect();
-    //   const data =
-    //     await client.sql`INSERT INTO post (name, htmlStr, title, shortContent, createDt, updateDt, index, tagList, previewImageUrl, likedCounter)
-    //   VALUES ('111', '<html>Content 111</html>', 'Sample Title 1', 'Short content 1', '2024-01-11', '2024-01-11', 4, 'tag1, tag2', 'image_url_1', 0),`;
-    //   await allFetch.postFetch("", {
-    //     name: userName,
-    //     htmlStr,
-    //     title,
-    //     shortContent: shortIntrodution,
-    //     tagList: tagList.current,
-    //     previewImageUrl,
-    //   });
-    //   alert("저장되었습니다.");
-    //   handleCloseModal();
-    //   router.push("/main");
-    // } catch (error) {
-    //   console.log("error", error);
-    // }
+
+    handlePost(obj, updatePost);
   };
 
   const handleCloseModal = () => {

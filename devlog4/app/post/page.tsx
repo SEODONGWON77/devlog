@@ -30,13 +30,20 @@ import { db, sql } from "@vercel/postgres";
 import { handlePost } from "app/lib/action";
 import { deleteFile } from "app/components/utils";
 import useCustomBack from "app/hooks/useCustomBack";
+import dynamic from 'next/dynamic';
+
+const ReactQuill = dynamic(() => import('react-quill'), { 
+  ssr: false,
+  loading: () => <p>Loading...</p>
+});
+
 type Props = {
   searchParams: any;
 };
 
 function Post({ searchParams }: Props) {
   const router = useRouter();
-
+  const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
   const [title, setTitle] = useState("");
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
@@ -197,11 +204,11 @@ function Post({ searchParams }: Props) {
   useCustomBack(handleBack);
 
   useEffect(() => {
-    void import('react-quill/dist/quill.core.css');
-    void import('react-quill/dist/quill.snow.css');
-    void import('react-quill/dist/quill.bubble.css');
+    import('react-quill/dist/quill.core.css');
+    import('react-quill/dist/quill.snow.css');
+    import('react-quill/dist/quill.bubble.css');
   }, []);
-  
+
   return (
     <div className="w-full mt-10">
       <div className="m-auto w-[1544px] mb-2">

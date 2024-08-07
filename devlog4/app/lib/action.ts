@@ -134,8 +134,8 @@ export async function handlePost({
   index,
   createDt,
   likedCounter,
-  update,
   tempSave,
+  isUpdate,
 }: {
   name: string;
   email: string;
@@ -147,8 +147,8 @@ export async function handlePost({
   index?: number;
   createDt?: Date;
   likedCounter?: number;
-  update?: boolean
   tempSave?:boolean
+  isUpdate?: boolean
 }
 ) {
   // Insert data into the database
@@ -176,6 +176,7 @@ export async function handlePost({
         , taglist = ${JSON.stringify(tagList)}
         , previewimageurl = ${previewImageUrl}
         , likedcounter = ${likedCounter}::INTEGER
+        , tempsave = ${tempSave}
       WHERE
         index = ${index}::INTEGER`;
     
@@ -208,7 +209,7 @@ export async function handlePost({
         , ${tempSave}
       );`;
 
-    const resultQuery = await (update ? updatePost() : insertPost());
+    const resultQuery = await (isUpdate ? updatePost() : insertPost());
 
     console.log(
       `>>>>>>>>>>>>>>>>>>>>>> ACTION >> INSERT "post" table: ${JSON.stringify(

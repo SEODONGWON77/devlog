@@ -119,7 +119,7 @@ function Post({ searchParams }: Props) {
   const handleSubmit = async (
     previewImageUrl: string,
     shortIntrodution: string,
-    updatePost?: boolean,
+    updatePost?: boolean, //editMode
     updateImage?: boolean,
     tempSave: boolean = false
   ) => {
@@ -136,9 +136,10 @@ function Post({ searchParams }: Props) {
       createDt,
       likedCounter,
       tempSave,
+      isUpdate:updatePost
     };
 
-    handlePost(obj, updatePost);
+    handlePost(obj);
   };
 
   const handleCloseModal = () => {

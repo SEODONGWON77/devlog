@@ -42,9 +42,10 @@ export async function getPostCardList() {
     , updatedt
     , createdt
     , tempsave  
-
   FROM post
-    ORDER BY createdt DESC`;
+  WHERE tempsave = FALSE
+  ORDER BY createdt DESC`;
+  
   const data = { response: selectTable.rows };
   return validateGetPostCardListResult(data);
 }

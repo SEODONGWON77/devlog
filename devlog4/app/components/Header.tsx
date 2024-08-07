@@ -29,7 +29,7 @@ const Header = () => {
           <Link href="/main">DevLog</Link>
         </div>
         <div className="flex ml-auto p-4 gap-3">
-          <Link href="/temp">임시</Link>
+          {data?.user &&<Link href="/temp">임시</Link>}
           <Link href="/main">메인</Link>
           {data?.user ? (
             <Fragment>

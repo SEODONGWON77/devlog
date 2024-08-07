@@ -196,6 +196,12 @@ function Post({ searchParams }: Props) {
   };
   useCustomBack(handleBack);
 
+  useEffect(() => {
+    void import('react-quill/dist/quill.core.css');
+    void import('react-quill/dist/quill.snow.css');
+    void import('react-quill/dist/quill.bubble.css');
+  }, []);
+  
   return (
     <div className="w-full mt-10">
       <div className="m-auto w-[1544px] mb-2">

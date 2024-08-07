@@ -121,6 +121,7 @@ function Post({ searchParams }: Props) {
     shortIntrodution: string,
     updatePost?: boolean,
     updateImage?: boolean,
+    tempSave: boolean = false
   ) => {
     
     const obj = {
@@ -134,6 +135,7 @@ function Post({ searchParams }: Props) {
       index: indexOrigin,
       createDt,
       likedCounter,
+      tempSave,
     };
 
     handlePost(obj, updatePost);

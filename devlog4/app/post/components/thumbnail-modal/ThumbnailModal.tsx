@@ -140,10 +140,16 @@ const ThumbnailModal = ({
           </button>
 
           <button
-            onClick={onClickSubmit}
+            onClick={()=>onClickSubmit(false)}
             className="mr-[10px] mt-[10px] font-bold leading-9  rounded h-9 w-14  text-md"
           >
             완료
+          </button>
+          <button
+            onClick={()=>onClickSubmit(true)}
+            className="mr-[10px] mt-[10px] font-bold leading-9  rounded h-9 w-14  text-md"
+          >
+            임시 저장
           </button>
         </div>
       </div>

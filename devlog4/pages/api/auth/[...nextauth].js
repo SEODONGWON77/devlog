@@ -54,6 +54,38 @@ async function getUser(email) {
   }
 }
 
+export const authOptions = {
+  session: {
+    strategy: "jwt",
+  },
+  providers: [
+    CredentialsProvider({
+      async authorize(credentials) {
+        const parsedCredentials = z
+          .object({ email: z.string().email(), password: z.string().min(6) })
+          .safeParse(credentials);
+
+        if (parsedCredentials.success) {
+          const { email, password } = parsedCredentials.data;
+          const user = await getUser(email);
+          if (!user) {
+            throw new Error("Invalid Email or Password");
+          }
+          if (password !== user.password) {
+            throw new Error("Invalid Email or Password");
+          }
+          return user;
+        }
+      },
+      credentials: undefined,
+    }),
+  ],
+  pages: {
+    signIn: "/auth/login",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+};
+
 export default NextAuth({
   session: {
     strategy: "jwt",

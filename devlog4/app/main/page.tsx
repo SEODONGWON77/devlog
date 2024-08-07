@@ -10,6 +10,7 @@ type Props = {};
 const Main = async ({}: Props) => {
   await getUsers();
   const { response: postCardList } = await getPostCardList();
+
   return (
     <div className="w-full h-screen">
       <div className="w-full z-20 fixed top-0 h-[100px]">

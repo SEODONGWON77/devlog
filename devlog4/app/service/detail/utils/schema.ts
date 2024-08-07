@@ -3,6 +3,7 @@ import {
   Number,
   String,
   NestedArray,
+  Boolean,
 } from "fastest-validator-decorators";
 @Schema()
 export class PostCard {
@@ -31,6 +32,8 @@ export class PostCard {
   createdt!: string;
   @String()
   likedcounter!: string;
+  @Boolean()
+  tempsave!: boolean;
   // @String({ nullable: true })
   // watchedcounter!: string | null;
 }

@@ -22,7 +22,7 @@ export async function getUsers() {
   } catch (error) {
     console.error(`[Error] Execute 'getUsers' ... `, error);
     throw error;
-  }
+  } 
 }
 
 export async function getPostCardList() {
@@ -41,8 +41,34 @@ export async function getPostCardList() {
     , taglist
     , updatedt
     , createdt
+    , tempsave  
+
   FROM post
     ORDER BY createdt DESC`;
+  const data = { response: selectTable.rows };
+  return validateGetPostCardListResult(data);
+}
+
+export async function getTempPostCardList(userEmail: string) {
+  const client = await db.connect();
+  const selectTable = await client.sql`
+    SELECT
+      index::INTEGER,
+      name,
+      email,
+      title,
+      taglist,
+      previewimageurl,
+      shortcontent,
+      likedcounter,
+      htmlstr,
+      taglist,
+      updatedt,
+      createdt,
+      tempsave
+    FROM post
+    WHERE tempsave = TRUE AND email = ${userEmail}
+  `;
   const data = { response: selectTable.rows };
   return validateGetPostCardListResult(data);
 }
@@ -108,6 +134,8 @@ export async function handlePost({
   index,
   createDt,
   likedCounter,
+  update,
+  tempSave,
 }: {
   name: string;
   email: string;
@@ -116,12 +144,13 @@ export async function handlePost({
   shortContent: string;
   tagList: string[];
   previewImageUrl: string;
-
   index?: number;
   createDt?: Date;
   likedCounter?: number;
-},
-update?: boolean,) {
+  update?: boolean
+  tempSave?:boolean
+}
+) {
   // Insert data into the database
   try {
     const client = await db.connect();
@@ -162,7 +191,8 @@ update?: boolean,) {
       , index
       , taglist
       , previewimageurl
-      , likedcounter)
+      , likedcounter
+      , tempsave)
       VALUES (
         ${name}
         , ${email}
@@ -175,6 +205,7 @@ update?: boolean,) {
         , ${JSON.stringify(tagList)}
         , ${previewImageUrl}
         , ${0}
+        , ${tempSave}
       );`;
 
     const resultQuery = await (update ? updatePost() : insertPost());

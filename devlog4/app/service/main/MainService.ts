@@ -1,4 +1,3 @@
-import { tempClaimResponse, tempPatentNumberMap } from "app/temp/mock/mockData";
 import { AllRestFetch } from "utils/api/createFetch";
 import { createAllRestFetchByDevlog } from "utils/api/fetch/devlogApiRestFetch";
 import { DefaultApiResponse } from "utils/api/types";
@@ -26,15 +25,5 @@ export default class MainResultService {
     });
 
     return validateGetSignInResult(data);
-  }
-
-  public async getTempResult() {
-    const data = tempPatentNumberMap;
-    return validateGetTempResult(data);
-  }
-
-  public async getTempResult2() {
-    const data = tempClaimResponse;
-    return validateGetTempResult2(data);
   }
 }

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+@import 'react-quill/dist/quill.core.css';
+@import 'react-quill/dist/quill.snow.css';
+@import 'react-quill/dist/quill.bubble.css';
+
 .ql-toolbar.ql-snow {
   border: 1px solid #e5e7eb;
 }

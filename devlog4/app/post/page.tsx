@@ -65,15 +65,7 @@ function Post({ searchParams }: Props) {
   const imageUrlList = useRecoilValueLoadable(imageUrlListState);
 
   useEffect(() => {
-  //   // if (viewContainerRef.current) {
-  //   //   viewContainerRef.current.innerHTML =
-  //   //     "<h2>html 코드를 이용하여 만들어지는 View입니다.</h2>";
-  //   //   viewContainerRef.current.innerHTML += htmlStr;
-  //   // }
     if (searchParams.edit && loginUserName) {
-      console.log("콘솔 loginUserName.. " , loginUserName);
-      console.log("콘솔 postData.. " , postData.contents);
-
       const {
         title,
         htmlstr,
@@ -163,23 +155,6 @@ function Post({ searchParams }: Props) {
     setIsThumbNailModalOpen(true);
   };
 
-  //새로고침용
-  // const handleBeforeUnload = useCallback(
-  //   (e: BeforeUnloadEvent) => {
-  //     e.preventDefault();
-  //     if (imageUrlList.state === "hasValue") {
-  //       const imageUrlStringList = imageUrlList.contents;
-  //       if (imageUrlStringList.length > 0)
-  //         imageUrlStringList.forEach((imageString) => {
-  //           const fileName: string = imageString.split("upload/")[1];
-  //           deleteFile(fileName);
-  //         });
-  //     }
-  //     router.back();
-  //   },
-  //   [imageUrlList, router]
-  // );
-
   const handleBack = () => {
     if (imageUrlList.state === "hasValue") {
       const imageUrlStringList = imageUrlList.contents;
@@ -202,12 +177,6 @@ function Post({ searchParams }: Props) {
     }
   };
   useCustomBack(handleBack);
-
-  useEffect(() => {
-    import('react-quill/dist/quill.core.css');
-    import('react-quill/dist/quill.snow.css');
-    import('react-quill/dist/quill.bubble.css');
-  }, []);
 
   return (
     <div className="w-full mt-10">

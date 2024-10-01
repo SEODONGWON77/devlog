@@ -38,7 +38,7 @@ const TocView = ({
   };
 
   return (
-    <aside className="fixed right-0 border mr-5 p-5 bg-white z-10 top-[45%] w-[250px] h-auto">
+    <aside className="fixed left-auto right-[15%] border p-5 bg-white z-10  w-[250px] h-auto">
       <ul>
         {indexList.map(({ index, size }) => (
           <li

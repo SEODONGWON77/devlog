@@ -2,17 +2,13 @@ import React from "react";
 
 interface HashtagListViewProps {
   text?: string;
-  order?: any;
+  order?: number;
 }
 
 const HashtagListView = React.forwardRef<
   HTMLInputElement,
   HashtagListViewProps
 >(({text, order}, ref): any => {
-  // return (
-  //   <div key={order} className={buttonStyle}>#{text}</div>
-  // );
-
   return (
     <button
       type="button"

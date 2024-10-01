@@ -1,3 +1,4 @@
+import { PostCard } from "app/service/detail/utils/schema";
 import { AtomEffect, atom, selector, useSetRecoilState } from "recoil";
 import { recoilPersist } from "recoil-persist";
 
@@ -21,16 +22,16 @@ export const persistAtomEffect = <T>(param: Parameters<AtomEffect<T>>[0]) => {
   param.getPromise(ssrCompletedState).then(() => persistAtom(param));
 };
 
-export const userEmailState = atom({
+export const userEmailState = atom<string>({
   key: "emailState",
   default: "",
 });
-export const userNameState = atom({
+export const userNameState = atom<string>({
   key: "nameState",
   default: "",
 });
 
-export const postState = atom({
+export const postState = atom<PostCard>({
   key: "postState",
   default: {
     title: "",
@@ -44,6 +45,7 @@ export const postState = atom({
     createdt: "",
     likedcounter: "",
     previewimageurl: "",
+    tempsave: false,
   },
   effects_UNSTABLE: [persistAtomEffect],
 });

@@ -16,10 +16,6 @@ const EditButtonView = React.forwardRef<
     setIsDeleteModalOpen(false);
   };
 
-  const onClickDeleteModalOpen = () => {
-    setIsDeleteModalOpen(true);
-  };
-
   const onClickEvent = () => {
     if (!isNaN(deleteIndex)) {
       setIsDeleteModalOpen(true);

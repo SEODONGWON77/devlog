@@ -29,16 +29,18 @@ const List = ({ postCardList }: ListProps) => {
         changeSearchWord={changeSearchWord}
         searchResult={searchResult}
       />
-      {searchResult === null 
-        ?  postCardList.map((postCard, index) => {
-            return <Card key={`${postCard.createdt}${index}`} card={postCard} />;
-           })
-        :  searchResult.length > 0 
-          ? searchResult.map((postCard, index) => {
-              return <Card key={`${postCard.createdt}${index}`} card={postCard} />;
+      <div className="flex flex-wrap flex-row justify-center w-full">
+        {searchResult === null  
+          ?  postCardList.map((postCard, index) => {
+              return <div className="w-fit" key={index}><Card key={`${postCard.createdt}${index}`} card={postCard} /></div>;
             })
-          : <div>검색결과 없음</div>
-      }
+          :  searchResult.length > 0 
+            ? searchResult.map((postCard, index) => {
+                return <div className="w-fit" key={index}><Card key={`${postCard.createdt}${index}`} card={postCard} /></div>;
+              })
+            : <div>검색결과 없음</div>
+        }
+      </div>
     </Fragment>
   );
 };

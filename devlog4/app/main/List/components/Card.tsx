@@ -47,7 +47,7 @@ const Card = ({
       <div>
         <Gallery url={previewimageurl} alt={`product-${index}`} />
         <div className="p-5">
-          <h5 className="cursor-pointer mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <h5 className="cursor-pointer mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-ellipsis overflow-hidden whitespace-nowrap">
             {title}
           </h5>
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">

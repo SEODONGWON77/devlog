@@ -15,9 +15,6 @@ const LikeButtonView = React.forwardRef<
   const [countLike, setCountLike] = useState(count);
   
   const onClickLikeAdded = async () => {
-
-    // console.log(countLike)
-
     // setCountLike(((counts) => ++ counts )((Number(countLike) || 0)));
     // const allFetch = createAllRestFetchByDevlog("post");
     /*const result = await allFetch.postFetch("", {
@@ -27,10 +24,6 @@ const LikeButtonView = React.forwardRef<
 
     count = Number(count) + 1;
     setCountLike(count);
-
-
-    console.log('콘솔 count ', count, ', index: ', _id);
-
     updatePostLikeCounter(_id, { likedCounter: count}).then(data => console.log('콘솔 likedCounter 결과 :: ', data));
 
     return countLike;

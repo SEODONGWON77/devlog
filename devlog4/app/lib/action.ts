@@ -10,11 +10,11 @@ export async function getUsers() {
     const client = await db.connect();
     // Create the "invoices" table if it doesn't exist
     console.log(`>>>>>>>>>>>>>>>>>>>>>> ACTION >> getUsers `);
-    const selectTable = await client.sql`SELECT
-        name
+    const selectTable = await client.sql
+    `SELECT name
         , email
         , password
-       FROM user_test`;
+     FROM user_test`;
 
     // console.log(`>>>>>>>>>>>>>>>>>>>>>> END >> SELECT "user_test" table: ${JSON.stringify(selectTable.rows)}`);
 
@@ -25,26 +25,31 @@ export async function getUsers() {
   } 
 }
 
-export async function getPostCardList() {
+export async function getPostCardList(count: number) {
   const client = await db.connect();
-  const selectTable = await client.sql`
-  SELECT
-    index::INTEGER
-    , name
-    , email
-    , title
-    , taglist
-    , previewimageurl
-    , shortcontent
-    , likedcounter
-    , htmlstr
-    , taglist
-    , updatedt
-    , createdt
-    , tempsave  
-  FROM post
-  WHERE tempsave = FALSE
-  ORDER BY createdt DESC`;
+  const selectTable = await client.sql
+  `WITH temp AS (
+    SELECT (ROW_NUMBER() OVER()) AS rownum
+      , index::INTEGER
+      , name
+      , email
+      , title
+      , taglist
+      , previewimageurl
+      , shortcontent
+      , likedcounter
+      , htmlstr
+      , taglist
+      , updatedt
+      , createdt
+      , tempsave  
+    FROM post
+     WHERE tempsave = FALSE
+     ORDER BY createdt DESC
+  )
+  SELECT t.*
+  FROM temp t
+  LIMIT ${Number(count)}`;
   
   const data = { response: selectTable.rows };
   return validateGetPostCardListResult(data);

@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import React, { Fragment } from "react";
 import { useRecoilValue } from "recoil";
@@ -13,7 +13,7 @@ interface ListProps {
 }
 
 const List = ({ postCardList }: ListProps) => {
-  const userName = useRecoilValue(userNameState);
+  console.log('postCardList?????', postCardList);
 
   const {
     searchWord,
@@ -29,16 +29,18 @@ const List = ({ postCardList }: ListProps) => {
         changeSearchWord={changeSearchWord}
         searchResult={searchResult}
       />
-      {searchResult === null 
-        ?  postCardList.map((postCard, index) => {
-            return <Card key={`${postCard.createdt}${index}`} card={postCard} />;
-           })
-        :  searchResult.length > 0 
-          ? searchResult.map((postCard, index) => {
-              return <Card key={`${postCard.createdt}${index}`} card={postCard} />;
+      <div className="flex flex-wrap flex-row justify-center w-full">
+        {searchResult === null 
+          ?  postCardList.map((postCard, index) => {
+              return <div className="w-fit" key={index}><Card key={`${postCard.createdt}${index}`} card={postCard} /></div>;
             })
-          : <div>검색결과 없음</div>
-      }
+          :  searchResult.length > 0 
+            ? searchResult.map((postCard, index) => {
+                return <div className="w-fit" key={index}><Card key={`${postCard.createdt}${index}`} card={postCard} /></div>;
+              })
+            : <div>검색결과 없음</div>
+        }
+      </div>
     </Fragment>
   );
 };

@@ -28,20 +28,13 @@ const Main = async ({}: Props) => {
             <InfiniteScroll
               propName="postCardList"
               fetcher={getPostCardList}
-              count={8}
+              count={12}
             >
               <List postCardList={[]}/>
             </InfiniteScroll>
           </div>
         <div className="w-[10%]">
       </div>
-      {/* <div className="w-full flex">
-        <div className="w-[10%]"></div>
-        <div className="w-[80%]">
-          <List postCardList={postCardList} />
-        </div>
-        <div className="w-[10%]"></div>
-      </div> */}
     </div>
   );
 };

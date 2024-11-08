@@ -25,11 +25,11 @@ export async function getUsers() {
   } 
 }
 
-export async function getPostCardList(count: number) {
+export async function getPostCardList({from, to}: any) {
   const client = await db.connect();
   const selectTable = await client.sql
   `WITH temp AS (
-    SELECT (ROW_NUMBER() OVER()) AS rownum
+    SELECT ROW_NUMBER() OVER(ORDER BY createdt DESC) AS rownum
       , index::INTEGER
       , name
       , email
@@ -49,7 +49,9 @@ export async function getPostCardList(count: number) {
   )
   SELECT t.*
   FROM temp t
-  LIMIT ${Number(count)}`;
+  WHERE rownum >= ${Number(from)} and rownum <=${Number(to)}
+  ORDER BY rownum`;
+  // LIMIT ${Number(count)}
   
   const data = { response: selectTable.rows };
   return validateGetPostCardListResult(data);

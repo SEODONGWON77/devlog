@@ -23,12 +23,12 @@ const List = ({ postCardList }: ListProps) => {
   } = useSearch();
   return (
     <Fragment>
-      <Search
+      {/* <Search
         searchWord={searchWord}
         searchBarKeyUp={searchBarKeyUp}
         changeSearchWord={changeSearchWord}
         searchResult={searchResult}
-      />
+      /> */}
       <div className="flex flex-wrap flex-row justify-center w-full">
         {searchResult === null 
           ?  postCardList.map((postCard, index) => {

@@ -17,46 +17,30 @@ const InfiniteScrollView = React.forwardRef<
   InfiniteScrollViewProps
 >(({ View, count, propName, fetcher, children }, ref): any => {
 
-  const loadingRef = useRef<HTMLDivElement>(null);
-  const [page, setPage] = useState(1)
-  const [fetchData, setFetchData] = useState(false);
-  const [stopFetch, setStopFetch] = useState(false);
-
-  //const [posts, setPosts] = useState<any>([]);
-  //const [isFetching, setIsFetching] = useState(false);
   const {
     data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isLoading,
-    isError,
     isSuccess,
-    isRefetching,
-    isFetching,
     isFetchingNextPage,
-    status,
-  }  = useInfiniteQuery({
+    fetchNextPage,
+  } = useInfiniteQuery({
     staleTime: 1000 * 60 * 60,
     queryKey: [`${propName}`],
-    queryFn: ({pageParam = 1}) => fetchPage({page: pageParam, count}),
-    getNextPageParam: (lastPage: any, allPages: any) => {
-      // console.log('콘솔 lastPage: ', lastPage, ', allPages: ', allPages);
-      const resultCount = (lastPage.length / count)  + 1;
-      return resultCount;
+    queryFn: ({ pageParam = 1 }) => fetchPage({ page: pageParam, count }),
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.length === count ? allPages.length + 1 : undefined;
     },
   });
-  
-  const fetchPage = async ({page, count}: any) => {
-    console.log('page: ', page, ', count: ', count);
 
-    setPage(page);
-
-    const from = (page - 1) * count || 1, to = (page * count);
-    console.log('from: ', page, ', to: ', count);
-
-    const {response}: any = await fetcher({from, to});
-    return JSON.parse(JSON.stringify(response));
+  const fetchPage = async ({ page, count }: { page: number; count: number }) => {
+    const from = ((page - 1) * count) + 1;
+    const to = (page * count);
+    try {
+      const { response }: any = await fetcher({ from, to });
+      return response ? JSON.parse(JSON.stringify(response)) : [];
+    } catch (error) {
+      console.error('Failed to fetch page', error);
+      return [];
+    }
   };
 
   const onScroll = useCallback(() => {
@@ -65,7 +49,6 @@ const InfiniteScrollView = React.forwardRef<
     const scrollPointCeiled = Math.ceil(scrollY + innerHeight);
 
     if (scrollPointCeiled >= totalPageHeight) {
-      console.log('Scroll on the floor ');
       fetchNextPage();
     }
   }, [isFetchingNextPage]);

@@ -12,7 +12,6 @@ type Props = {};
 
 const Main = async ({}: Props) => {
   await getUsers();
-  // const { response: postCardList } = await getPostCardList(); 
   const postCardListDefault = {
     data: [],
     key: 1,
@@ -32,7 +31,7 @@ const Main = async ({}: Props) => {
             <InfiniteScroll
               propName="postCardList"
               fetcher={getPostCardList}
-              count={15}
+              count={8}
             >
               <List postCardList={postCardListDefault} />
             </InfiniteScroll>

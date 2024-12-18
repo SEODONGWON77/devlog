@@ -27,32 +27,43 @@ export async function getUsers() {
 
 export async function getPostCardList({from, to}: any) {
   const client = await db.connect();
-  const selectTable = await client.sql
-  `WITH temp AS (
-    SELECT ROW_NUMBER() OVER(ORDER BY createdt DESC) AS rownum
-      , index::INTEGER
-      , name
-      , email
-      , title
-      , taglist
-      , previewimageurl
-      , shortcontent
-      , likedcounter
-      , htmlstr
-      , taglist
-      , updatedt
-      , createdt
-      , tempsave  
-    FROM post
-     WHERE tempsave = FALSE
-     ORDER BY createdt DESC
-  )
-  SELECT t.*
-  FROM temp t
-  WHERE rownum >= ${Number(from)} and rownum <=${Number(to)}
-  ORDER BY rownum`;
-  // LIMIT ${Number(count)}
   
+  // 전체 게시물 수를 먼저 조회
+  const totalCountResult = await client.sql`
+    SELECT COUNT(*) as total 
+    FROM post 
+    WHERE tempsave = FALSE
+  `;
+  const totalCount = Number(totalCountResult.rows[0].total);
+  
+  const adjustedTo = Math.min(Number(to), totalCount);
+
+  const selectTable = await client.sql`
+    WITH temp AS (
+      SELECT ROW_NUMBER() OVER(ORDER BY createdt DESC) AS rownum
+        , index::INTEGER
+        , name
+        , email
+        , title
+        , taglist
+        , previewimageurl
+        , shortcontent
+        , likedcounter
+        , htmlstr
+        , taglist
+        , updatedt
+        , createdt
+        , tempsave
+      FROM post
+      WHERE tempsave = FALSE
+      ORDER BY createdt DESC
+    )
+    SELECT t.*
+    FROM temp t
+    WHERE rownum >= ${Number(from)} and rownum <= ${adjustedTo}
+    ORDER BY rownum
+  `;
+
   const data = { response: selectTable.rows };
   return validateGetPostCardListResult(data);
 }

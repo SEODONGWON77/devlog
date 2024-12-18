@@ -31,24 +31,32 @@ export const userNameState = atom<string>({
   default: "",
 });
 
+const postDefaultProps = {
+  title: "",
+  index: 0,
+  htmlstr: "",
+  shortcontent: "",
+  name: "",
+  email: "",
+  taglist: "",
+  updatedt: "",
+  createdt: "",
+  likedcounter: "",
+  previewimageurl: "",
+  tempsave: false,
+};
+
 export const postState = atom<PostCard>({
   key: "postState",
-  default: {
-    title: "",
-    index: 0,
-    htmlstr: "",
-    shortcontent: "",
-    name: "",
-    email: "",
-    taglist: "",
-    updatedt: "",
-    createdt: "",
-    likedcounter: "",
-    previewimageurl: "",
-    tempsave: false,
-  },
+  default: postDefaultProps,
   effects_UNSTABLE: [persistAtomEffect],
 });
+
+export const searchListState = atom<PostCard[]>({
+  key: "searchListState",
+  default: [],
+  // effects_UNSTABLE: [persistAtomEffect],
+}) || null as any;
 
 export const imageUrlListState = atom<string[]>({
   key: "imageUrlListState",

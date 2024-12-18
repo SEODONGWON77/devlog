@@ -13,7 +13,10 @@ type Props = {};
 const Main = async ({}: Props) => {
   await getUsers();
   // const { response: postCardList } = await getPostCardList(); 
- 
+  const postCardListDefault = {
+    data: [],
+    key: 1,
+  };
   return (
     <div className="w-full h-screen">
       <div className="w-full z-20 fixed top-0 h-[100px]">
@@ -22,18 +25,19 @@ const Main = async ({}: Props) => {
       <div className="h-[330px] relative w-full bg-[#5bbdff] flex justify-center items-center text-white">
         teamDevelop2
       </div>
-      <div className="w-full">
-        <div className="w-[10%]"></div>
-          <div className="w-[80%]"></div>
+      <div className="w-full flex flex-wrap flex-row justify-center">
+          <div className="w-[10%]"></div>
+          <div className="w-[80%]">
+            <Search />
             <InfiniteScroll
               propName="postCardList"
               fetcher={getPostCardList}
-              count={12}
+              count={15}
             >
-              <List postCardList={[]}/>
+              <List postCardList={postCardListDefault} />
             </InfiniteScroll>
           </div>
-        <div className="w-[10%]">
+          <div className="w-[10%]"></div>
       </div>
     </div>
   );

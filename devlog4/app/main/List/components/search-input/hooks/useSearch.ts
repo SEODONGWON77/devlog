@@ -2,6 +2,9 @@ import { searchPosts } from "app/lib/action";
 import { PostCard } from "app/service/detail/utils/schema";
 import React, { useState, useEffect, useCallback } from "react";
 
+import { RecoilState, useSetRecoilState } from "recoil";
+import { searchListState } from "../../../../../recoil/state";
+
 export function useSearch() {
   const [searchWord, setSearchWord] = useState<string>("");
   const [searchOriginalWord, setSearchOriginalWord] = useState<string>("");
@@ -9,6 +12,8 @@ export function useSearch() {
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [isSearch, setIsSearch] = useState<boolean>(false);
   const [searchResult, setSearchResult] = useState<PostCard[] | null>(null);
+
+  const setSearchListState  = useSetRecoilState(searchListState);
 
   const changeSearchWord = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchOriginalWord(e.target.value);
@@ -31,6 +36,7 @@ export function useSearch() {
       if (searchString.length === 0) return;
       const res = await searchPosts(searchString);
       setSearchResult(res as PostCard[]);
+      setSearchListState(res as PostCard[]);
     }, 1000),
     []
   );

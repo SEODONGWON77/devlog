@@ -15,12 +15,15 @@ interface SearchProps {
   searchResult: any;
 }
 
-const Search = ({
-  searchWord,
-  changeSearchWord,
-  searchBarKeyUp,
-  searchResult,
-}: SearchProps) => {
+const Search = () => {
+
+  const {
+    searchWord,
+    searchResult,
+    changeSearchWord,
+    searchBarKeyUp,
+  } = useSearch();
+
   return (
     <div className="flex align-middle justify-center mt-8">
       <div className="w-[50%] h-[3rem] p-[2px] flex border border-solid border-lightGray-20 rounded-md">

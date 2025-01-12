@@ -3,7 +3,6 @@ import List from "./List";
 import "../../styles/globals.css";
 import Header from "app/components/Header";
 import { getTempPostCardList } from "../lib/action";
-import { useSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "pages/api/auth/[...nextauth]";
 import type { AuthOptions } from "next-auth";
@@ -12,7 +11,7 @@ const Temp = async () => {
   const session = await getServerSession(authOptions as AuthOptions)
   const userEmail = session?.user?.email ?? ""
 
-  const { response: postTempCardList } = await getTempPostCardList(userEmail);
+  const { response: tempPostCardList } = await getTempPostCardList(userEmail);
 
   return (
     <div className="w-full h-screen">
@@ -25,7 +24,7 @@ const Temp = async () => {
       <div className="w-full flex">
         <div className="w-[10%]"></div>
         <div className="w-[80%]">
-          <List postCardList={postTempCardList} />
+          <List postCardList={tempPostCardList} />
         </div>
         <div className="w-[10%]"></div>
       </div>

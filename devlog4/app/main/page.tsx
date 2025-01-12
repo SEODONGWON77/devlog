@@ -25,18 +25,19 @@ const Main = async ({}: Props) => {
         teamDevelop
       </div>
       <div className="w-full flex flex-wrap flex-row justify-center">
-          <div className="w-[10%]"></div>
-          <div className="w-[80%]">
-            <Search />
-            <InfiniteScroll
-              propName="postCardList"
-              fetcher={getPostCardList}
-              count={8}
-            >
-              <List postCardList={postCardListDefault} />
-            </InfiniteScroll>
-          </div>
-          <div className="w-[10%]"></div>
+        <div className="w-full ">
+          <Search />
+        </div>
+        <div className="w-full flex flex-wrap flex-col justify-center items-center">
+          <InfiniteScroll
+            propName="postCardList"
+            fetcher={getPostCardList}
+            count={8}
+          >
+            <List postCardList={postCardListDefault} />
+          </InfiniteScroll>
+        </div>
+        <div className="w-[10%]"></div>
       </div>
     </div>
   );

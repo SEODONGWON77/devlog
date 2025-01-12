@@ -249,8 +249,6 @@ export async function handlePost({
 export async function searchPosts(searchTerm: string) {
   try {
     const client = await db.connect();
-    console.log(`>>>>>>>>>>>>>>>>>>>>>> ACTION >> searchPosts `);
-
     const searchResults = await client.sql`
       SELECT 
         index::INTEGER,

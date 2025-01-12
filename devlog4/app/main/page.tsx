@@ -22,7 +22,7 @@ const Main = async ({}: Props) => {
         <Header />
       </div>
       <div className="h-[330px] relative w-full bg-[#5bbdff] flex justify-center items-center text-white">
-        teamDevelop2
+        teamDevelop
       </div>
       <div className="w-full flex flex-wrap flex-row justify-center">
           <div className="w-[10%]"></div>

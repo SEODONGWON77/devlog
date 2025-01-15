@@ -10,6 +10,7 @@ import {
   useRecoilValue,
   useRecoilValueLoadable,
   useResetRecoilState,
+  useSetRecoilState,
 } from "recoil";
 import {
   userEmailState,
@@ -32,7 +33,7 @@ import { deleteFile } from "app/components/utils";
 import useCustomBack from "app/hooks/useCustomBack";
 import dynamic from 'next/dynamic';
 
-const ReactQuill = dynamic(() => import('react-quill'), { 
+const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading...</p>
 });
@@ -43,26 +44,22 @@ type Props = {
 
 function Post({ searchParams }: Props) {
   const router = useRouter();
-  const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+  const imageUrlListRef = useRef<string[]>([]);
   const [title, setTitle] = useState("");
   const [userName, setUserName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
   const [htmlStr, setHtmlStr] = useState<string | null>(null);
-
   const [indexOrigin, setIndexOrigin] = useState(0);
   const [createDt, setCreatedt] = useState(new Date());
   const [likedCounter, setLikedcounter] = useState(0);
   const [previewImageUrlOrigin, setPreviewImageUrlOrigin] = useState("");
-
   const tagList = useRef<string[]>([]);
   const [isThumbNailModalOpen, setIsThumbNailModalOpen] = useState(false);
-  
   const { data } = useSession();
-
   const postData: any = useRecoilValueLoadable(postState);
   const loginUserName = useRecoilValueLoadable(userNameState);
   const loginUserEmail = useRecoilValueLoadable(userEmailState);
-  const imageUrlList = useRecoilValueLoadable(imageUrlListState);
+  const imageUrlList = useRecoilValue(imageUrlListState);
+  const setImageUrlList = useSetRecoilState(imageUrlListState);
 
   useEffect(() => {
     if (searchParams.edit && loginUserName) {
@@ -79,14 +76,14 @@ function Post({ searchParams }: Props) {
       setUserName(loginUserName.contents as unknown as string);
       setTitle(title);
       setHtmlStr(htmlstr);
-
       setIndexOrigin(index);
       setCreatedt(new Date(createdt));
       setLikedcounter(likedcounter);
       setPreviewImageUrlOrigin(previewimageurl);
-      
+      setImageUrlList([])
+
       // tagList.current = 
-      getSplitTagList(((textList) => textList.join(' '))(JSON.parse(taglist)));
+      getSplitTagList(((textList) => textList.join(' '))(JSON.parse(taglist || '[]')));
 
     } else {
       setUserName(typeof data?.user?.name !== "string" ? "" : data?.user?.name);
@@ -122,7 +119,7 @@ function Post({ searchParams }: Props) {
     updateImage?: boolean,
     tempSave: boolean = false
   ) => {
-    
+
     const obj = {
       name: loginUserName.contents,
       email: loginUserEmail.contents,
@@ -135,7 +132,7 @@ function Post({ searchParams }: Props) {
       createDt,
       likedCounter,
       tempSave,
-      isUpdate:updatePost
+      isUpdate: updatePost
     };
 
     handlePost(obj);
@@ -155,28 +152,43 @@ function Post({ searchParams }: Props) {
     setIsThumbNailModalOpen(true);
   };
 
-  const handleBack = () => {
-    if (imageUrlList.state === "hasValue") {
-      const imageUrlStringList = imageUrlList.contents;
-      if (imageUrlStringList.length > 0) {
-        Promise.all(
-          imageUrlStringList.map((imageString) => {
-            const fileName: string = imageString.split("upload/")[1];
-            return deleteFile(fileName);
-          })
-        )
-          .then(() => {
-            router.push("/main");
-          })
-          .catch((error) => {
-            console.error("에러:", error);
-          });
-      } else {
-        router.push("/main");
+
+
+
+  const handleBack = async () => {
+    try {
+      if (imageUrlListRef.current && imageUrlListRef.current.length > 0) {
+        const deletePromises = imageUrlListRef.current.map(async (imageUrl) => {
+          try {
+            const urlParts = imageUrl.split('/');
+            const fileName = urlParts[urlParts.indexOf('upload') + 1];
+
+            if (!fileName) {
+              console.warn(`Could not extract filename from URL: ${imageUrl}`);
+              return;
+            }
+
+            return await deleteFile(fileName);
+          } catch (error) {
+            console.error(`Failed to delete image: ${imageUrl}`, error);
+            return;
+          }
+        });
+
+        await Promise.all(deletePromises);
       }
+
+      router.push('/main');
+    } catch (error) {
+      console.error('Failed to clean up images:', error);
+      router.push('/main');
     }
   };
   useCustomBack(handleBack);
+
+  useEffect(() => {
+    imageUrlListRef.current = imageUrlList;
+  }, [imageUrlList]);
 
   return (
     <div className="w-full mt-10">

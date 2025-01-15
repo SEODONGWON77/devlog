@@ -37,14 +37,20 @@ const s3 = new AWS.S3({
 });
 
 export const deleteFile = async (fileName: string) => {
+  if (!fileName) {
+    throw new Error('fileName is required');
+  }
   const params = {
     Bucket: S3_BUCKET,
-    Key: "upload/" + `${fileName}`,
+    Key: `upload/${fileName}`
   };
-  return await myBucket
-    .deleteObject(params)
-    .promise()
-    .then((res) => {
-      return res;
-    });
+
+  try {
+    const result = await myBucket.deleteObject(params).promise();
+    console.log(`Successfully deleted file: ${fileName}`);
+    return result;
+  } catch (error) {
+    console.error(`Error deleting file ${fileName}:`, error);
+    throw error;
+  }
 };

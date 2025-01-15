@@ -27,7 +27,6 @@ hljs.configure({
 
 const Editor = ({ htmlStr, handleHtmlStr }: IEditor) => {
   const quillRef = React.useRef<ReactQuill>(null);
-  const prevImageUrlList = useRecoilValue(imageUrlListState);
   const setImageUrlList = useSetRecoilState(imageUrlListState);
 
   const imageHandler = () => {

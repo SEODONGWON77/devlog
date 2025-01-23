@@ -2,7 +2,7 @@
 
 import React, { Fragment, useState, useCallback, useEffect } from "react";
 import { useRecoilValue, useRecoilValueLoadable } from "recoil";
-import { userNameState, searchListState} from "../../recoil/state";
+import { userNameState, searchListState } from "../../recoil/state";
 import { useSearch } from "./components/search-input/hooks/useSearch";
 import { PostCard } from "app/service/detail/utils/schema";
 import Card from "./components/Card";
@@ -24,14 +24,13 @@ const devideWidth = {
 }
 
 const List = ({
-  postCardList = {data: [], key: 1},
+  postCardList = { data: [], key: 1 },
 }: ListProps) => {
 
   const { data, key }: PostCardListProps = postCardList;
   const searchList = useRecoilValueLoadable(searchListState);
   const searchResult: PostCard[] = searchList.contents;
   const [gridCols, setGridCols] = useState(devideWidth[4]);
-
   const handleGridCols = () => {
     const { innerWidth, scrollY } = window;
     if (innerWidth >= 1550) {
@@ -47,7 +46,6 @@ const List = ({
 
   useEffect(() => {
     handleGridCols();
-    
     window.addEventListener("resize", onResize, { passive: true });
     return () => window.removeEventListener("resize", onResize);
   }, []);
@@ -55,18 +53,14 @@ const List = ({
   return (
     <Fragment>
       <div className={gridCols} key={key}>
-      {/* <div className="w-full flex flex-wrap flex-row justify-center" key={key}> */}
-        {!searchResult.length 
-          ?  data.map((postCard, index) => {
-              // return <div key={`${index}`} className="w-fit"><Card key={`${postCard.createdt}${index}`} card={postCard} /></div>;
-              return <div key={`${index}`} className="w-full flex flex-wrap justify-center items-center"><Card key={`${postCard.createdt}${index}`} card={postCard} /></div>;
-            })
-          :  searchResult.length > 0 
-            ? searchResult.map((postCard: PostCard, index: number) => {
-                // return <div key={`${index}`} className="w-fit"><Card key={`${postCard.createdt}${index}`} card={postCard} /></div>;
-                return <div key={`${index}`} className="w-full flex flex-wrap justify-center items-center"><Card key={`${postCard.createdt}${index}`} card={postCard} /></div>;
-              })
-            : <div>검색결과 없음</div>
+        {searchResult.length > 0
+          ? 
+          searchResult.map((postCard: PostCard, index: number) => {
+            return <div key={`${index}`} className="w-full flex flex-wrap justify-center items-center"><Card key={`${postCard.createdt}${index}`} card={postCard} /></div>;
+          })
+          : data.length > 0 ? data.map((postCard, index) => {
+            return <div key={`${index}`} className="w-full flex flex-wrap justify-center items-center"><Card key={`${postCard.createdt}${index}`} card={postCard} /></div>;
+          }) : <div>검색결과 없음</div>
         }
       </div>
     </Fragment>

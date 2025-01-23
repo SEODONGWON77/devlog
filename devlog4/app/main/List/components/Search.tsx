@@ -3,7 +3,7 @@
 import React, { useRef } from "react";
 import Image from "next/image";
 import { debounce } from "utils/debounce/debounce";
-import { getPostCardList, searchPosts } from "app/lib/action";
+import { searchPosts } from "app/lib/action";
 import { useSetRecoilState } from "recoil";
 import { searchListState } from "../../../recoil/state";
 import { PostCard } from "app/service/detail/utils/schema";
@@ -21,13 +21,9 @@ const Search = () => {
   };
 
   const debounceFilter = debounce(async (value: string) => {
-    if (value === "") {
-      const allPosts = await getPostCardList({ from: 1, to: 8 });
-      setSearchListState(allPosts.response as PostCard[]);
-    } else {
-      const res = await searchPosts(value);
-      setSearchListState(res as PostCard[]);
-    }
+    if (value === "") return setSearchListState([]);
+    const res = await searchPosts(value);
+    setSearchListState(res as PostCard[]);
   }, 1000);
 
   return (
